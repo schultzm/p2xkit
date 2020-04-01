@@ -149,6 +149,11 @@ def main():
         description="Create a bed file of primer and probe map.",
         parents=[subparser1_args],
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    subparser_modules.add_parser(
+        "test", help="""Run p2xkit tests""",
+        description="CRun p2xkit tests",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     args = parser.parse_args()
 
     if not args.subparser_name:
@@ -158,6 +163,12 @@ def main():
         # from p2xkit import __version__
     elif args.subparser_name == "version":
         print(p2xkit.__version__)
+    elif args.subparser_name == "test":
+        import unittest
+        from .tests.test_suite import suite
+        runner = unittest.TextTestRunner(verbosity=2)
+        runner.run(suite())
+
 
 if __name__ == "__main__":
     main()
