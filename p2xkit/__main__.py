@@ -11,9 +11,8 @@
 # import os
 # import sys
 # from io import StringIO
-# from pathlib import Path, PurePath
-# from subprocess import Popen, PIPE
 # import shlex
+# from subprocess import Popen, PIPE
 # import pysam
 # from collections import defaultdict
 # print(sys.argv)
@@ -130,17 +129,18 @@
 def main():
     """Perform the main routine."""
     import argparse
+    from pathlib import Path, PurePath
+    import p2xkit
+
     parser = argparse.ArgumentParser(
             formatter_class=argparse.ArgumentDefaultsHelpFormatter,
             description="""
                         """)
     subparser1_args = argparse.ArgumentParser(add_help=False)
-    subparser1_args.add_argument("align", help="Input newick tree")
-    subparser1_args.add_argument("-p", "--precision", help = """Branch length precision
-                                                       (i.e., number of decimal places to
-                                                       print).""",
+    subparser1_args.add_argument("primers", help="primersearch formatted tab file")
+    subparser1_args.add_argument("-p", "--probes", help = """Fasta formatted qPCR probes file""",
                         default = None,
-                        type = int)
+                        type = str)
     subparser_modules = parser.add_subparsers(
         title="Sub-commands help", help="", metavar="", dest="subparser_name")
     subparser_modules.add_parser(
@@ -153,9 +153,11 @@ def main():
 
     if not args.subparser_name:
         parser.print_help()
-    elif args.subparser_name == "align":
-        # from p2xtree import __version__
-        print(p2xtree.__version__)
+    elif args.subparser_name == "bed":
+        pass
+        # from p2xkit import __version__
+    elif args.subparser_name == "version":
+        print(p2xkit.__version__)
 
 if __name__ == "__main__":
     main()
