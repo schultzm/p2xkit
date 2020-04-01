@@ -1,65 +1,65 @@
 #!/usr/bin/env python3
 
-from p2xkit.utils.oligo_pair import Oligo_pair
-from Bio.Emboss import  PrimerSearch as psearch
-from Bio.Emboss.Applications import PrimerSearchCommandline
-from Bio import SeqIO, AlignIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.Alphabet import IUPAC
-from Bio.Align import MultipleSeqAlignment as MSA
-import os
-import sys
-from io import StringIO
-from pathlib import Path, PurePath
-from subprocess import Popen, PIPE
-import shlex
-import pysam
-from collections import defaultdict
-print(sys.argv)
-psearchcl = PrimerSearchCommandline()
-psearchcl.seqall = f"{sys.argv[1]} -snucleotide1"
-psearchcl.infile = sys.argv[2]
-psearchcl.mismatchpercent = 20
-psearchcl.outfile = "stdout"
-print(psearchcl, file = sys.stderr)
-stdout, stderr = psearchcl()
-primersearch_results = psearch.read(StringIO(stdout))
+# from p2xkit.utils.oligo_pair import Oligo_pair
+# from Bio.Emboss import  PrimerSearch as psearch
+# from Bio.Emboss.Applications import PrimerSearchCommandline
+# from Bio import SeqIO, AlignIO
+# from Bio.Seq import Seq
+# from Bio.SeqRecord import SeqRecord
+# from Bio.Alphabet import IUPAC
+# from Bio.Align import MultipleSeqAlignment as MSA
+# import os
+# import sys
+# from io import StringIO
+# from pathlib import Path, PurePath
+# from subprocess import Popen, PIPE
+# import shlex
+# import pysam
+# from collections import defaultdict
+# print(sys.argv)
+# psearchcl = PrimerSearchCommandline()
+# psearchcl.seqall = f"{sys.argv[1]} -snucleotide1"
+# psearchcl.infile = sys.argv[2]
+# psearchcl.mismatchpercent = 20
+# psearchcl.outfile = "stdout"
+# print(psearchcl, file = sys.stderr)
+# stdout, stderr = psearchcl()
+# primersearch_results = psearch.read(StringIO(stdout))
 
-# Template seqs with key as seq.id
-template_seqrecords = None
-with open(sys.argv[1]) as input_handle:
-    seqs = {seq.id: seq for seq in list(SeqIO.parse(input_handle, 'fasta'))}
+# # Template seqs with key as seq.id
+# template_seqrecords = None
+# with open(sys.argv[1]) as input_handle:
+#     seqs = {seq.id: seq for seq in list(SeqIO.parse(input_handle, 'fasta'))}
 
-# Probe seqs with key as primerpair_name.  
-# Each probe MUST have same name as corresponding primerpair
-probes = None
-with open(sys.argv[3]) as input_handle:
-    probes = {probe.id: probe for probe in list(SeqIO.parse(input_handle, 'fasta'))}
+# # Probe seqs with key as primerpair_name.  
+# # Each probe MUST have same name as corresponding primerpair
+# probes = None
+# with open(sys.argv[3]) as input_handle:
+#     probes = {probe.id: probe for probe in list(SeqIO.parse(input_handle, 'fasta'))}
 
-def collapse_iupac(seqstring):
-    '''
-    Given a seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
-    return 'CARATGTTAAASACACTATTAGCATA' (IUPAC expansion is collapsed).
-    '''
-    IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn'''
-    collapsed_list = []
-    splitseq = seqstring.replace('[', ']').split(']')
-    for i in splitseq:
-        returnval = ''
-        dosomething = False
-        for j in i:
-            if j in IUPAC_codes:
-                dosomething = True
-        if dosomething:
-            collapsed_list.append(i[-1])
-        else:
-            collapsed_list.append(i)
-    return ''.join(collapsed_list)
+# def collapse_iupac(seqstring):
+#     '''
+#     Given a seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
+#     return 'CARATGTTAAASACACTATTAGCATA' (IUPAC expansion is collapsed).
+#     '''
+#     IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn'''
+#     collapsed_list = []
+#     splitseq = seqstring.replace('[', ']').split(']')
+#     for i in splitseq:
+#         returnval = ''
+#         dosomething = False
+#         for j in i:
+#             if j in IUPAC_codes:
+#                 dosomething = True
+#         if dosomething:
+#             collapsed_list.append(i[-1])
+#         else:
+#             collapsed_list.append(i)
+#     return ''.join(collapsed_list)
 
 
 
-print(amplicon_dict_builder(primersearch_results.amplifiers, template_seqrecords))
+# print(amplicon_dict_builder(primersearch_results.amplifiers, template_seqrecords))
 
 # Process emboss primersearch 'results' dict:
     # holds template_list under primerpair keys
@@ -128,6 +128,34 @@ print(amplicon_dict_builder(primersearch_results.amplifiers, template_seqrecords
         #                         # print(aln.format('fasta'))
 
 def main():
-    pass
+    """Perform the main routine."""
+    import argparse
+    parser = argparse.ArgumentParser(
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+            description="""
+                        """)
+    subparser1_args = argparse.ArgumentParser(add_help=False)
+    subparser1_args.add_argument("align", help="Input newick tree")
+    subparser1_args.add_argument("-p", "--precision", help = """Branch length precision
+                                                       (i.e., number of decimal places to
+                                                       print).""",
+                        default = None,
+                        type = int)
+    subparser_modules = parser.add_subparsers(
+        title="Sub-commands help", help="", metavar="", dest="subparser_name")
+    subparser_modules.add_parser(
+        "bed", help="""Map the primers and/or probes to ref and output
+                       bed file to stdout.""",
+        description="Create a bed file of primer and probe map.",
+        parents=[subparser1_args],
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    args = parser.parse_args()
+
+    if not args.subparser_name:
+        parser.print_help()
+    elif args.subparser_name == "align":
+        # from p2xtree import __version__
+        print(p2xtree.__version__)
+
 if __name__ == "__main__":
     main()
