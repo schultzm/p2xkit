@@ -7,8 +7,10 @@ from pathlib import Path
 # from .. import __parent_dir__, __test_tree__
 import pkg_resources
 
-class TreeTestCasePass(unittest.TestCase):
+class BedTestCasePass(unittest.TestCase):
     maxDiff = None
     def setUp(self):
         print("")
-        self.primers = ()
+        # self.primers = ()
+    def primers_table(self):
+        print("primers table")

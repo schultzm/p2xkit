@@ -1,5 +1,5 @@
 import unittest
-from ..tests.budgitree_test import TreeTestCasePass
+from ..tests.p2xkit_test import BedTestCasePass
 
 
 def suite():
@@ -7,5 +7,5 @@ def suite():
     This is the test suite.
     """
     suite = unittest.TestSuite()
-    # suite.addTest(TreeTestCasePass('ete_print_tree'))
+    suite.addTest(BedTestCasePass("primers_table"))
     return suite
