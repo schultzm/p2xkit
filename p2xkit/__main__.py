@@ -137,10 +137,10 @@ def main():
             description="""
                         """)
     subparser1_args = argparse.ArgumentParser(add_help=False)
-    subparser1_args.add_argument("primers", help="primersearch formatted tab file")
-    subparser1_args.add_argument("-p", "--probes", help = """Fasta formatted qPCR probes file""",
-                        default = None,
-                        type = str)
+    subparser1_args.add_argument("template", help = "Template fasta")
+    subparser1_args.add_argument("primers", help = "primersearch formatted tab file")
+    subparser1_args.add_argument("mismatch", help = "Percent mismatch tolerance")
+    subparser1_args.add_argument("probes", help = "Fasta formatted qPCR probes file",)
     subparser_modules = parser.add_subparsers(
         title="Sub-commands help", help="", metavar="", dest="subparser_name")
     subparser_modules.add_parser(
