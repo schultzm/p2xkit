@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # from p2xkit.utils.oligo_pair import Oligo_pair
-# from Bio.Emboss import  PrimerSearch as psearch
+from Bio.Emboss import  PrimerSearch as psearch
 from Bio.Emboss.Applications import PrimerSearchCommandline
 from io import StringIO
 # from Bio import SeqIO, AlignIO
