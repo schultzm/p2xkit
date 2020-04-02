@@ -34,7 +34,7 @@ class Hit:
     def __init__(self, seqstring):
         self.expanded = seqstring
     
-    def collapse_iupac(self):
+    def collapsed_iupac(self):
         '''
         Given an 'expanded' seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
         return collapsed seqstring 'CARATGTTAAASACACTATTAGCATA' (with IUPAC codes).

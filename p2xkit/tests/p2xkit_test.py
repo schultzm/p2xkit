@@ -36,6 +36,6 @@ class BedTestCasePass(unittest.TestCase):
         # self.assertEqual(Psearcher, 'x')
 
     def iupaccheck(self):
-        inseq = Hit("CA[GAR]ATGTTAAA[GCS][ACA]CTATTAGCATA")
-        inseq.collapse_iupac()
+        inseq = Hit("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA")
+        inseq.collapsed_iupac()
         self.assertEqual("CARATGTTAAASACACTATTAGCATA", inseq.collapsed)
