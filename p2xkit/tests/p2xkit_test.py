@@ -24,7 +24,7 @@ class BedTestCasePass(unittest.TestCase):
         result.psearchit()
         pcr_results = result.pcr_hits
         # print(result.pcr_hits)
-
+        pcr_results.amplifiers['N_Sarbeco_DE']
         # # print(result())
         for key, value in pcr_results.amplifiers.items():
             for i in value:
