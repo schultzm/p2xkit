@@ -2,7 +2,8 @@
 
 # from p2xkit.utils.oligo_pair import Oligo_pair
 # from Bio.Emboss import  PrimerSearch as psearch
-# from Bio.Emboss.Applications import PrimerSearchCommandline
+from Bio.Emboss.Applications import PrimerSearchCommandline
+from io import StringIO
 # from Bio import SeqIO, AlignIO
 # from Bio.Seq import Seq
 # from Bio.SeqRecord import SeqRecord
@@ -10,7 +11,6 @@
 # from Bio.Align import MultipleSeqAlignment as MSA
 # import os
 # import sys
-# from io import StringIO
 # import shlex
 # from subprocess import Popen, PIPE
 # import pysam
@@ -144,8 +144,8 @@ def main():
     subparser_modules = parser.add_subparsers(
         title="Sub-commands help", help="", metavar="", dest="subparser_name")
     subparser_modules.add_parser(
-        "bed", help="""Map the primers and/or probes to ref and output
-                       bed file to stdout.""",
+        "bed", help="""Map the primers and probes to ref output
+                       bed file.""",
         description="Create a bed file of primer and probe map.",
         parents=[subparser1_args],
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
