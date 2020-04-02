@@ -7,5 +7,5 @@ def suite():
     This is the test suite.
     """
     suite = unittest.TestSuite()
-    suite.addTest(BedTestCasePass("primers_table"))
+    suite.addTest(BedTestCasePass("psearcher"))
     return suite
