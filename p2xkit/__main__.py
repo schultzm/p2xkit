@@ -36,27 +36,6 @@ from io import StringIO
 # with open(sys.argv[3]) as input_handle:
 #     probes = {probe.id: probe for probe in list(SeqIO.parse(input_handle, 'fasta'))}
 
-# def collapse_iupac(seqstring):
-#     '''
-#     Given a seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
-#     return 'CARATGTTAAASACACTATTAGCATA' (IUPAC expansion is collapsed).
-#     '''
-#     IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn'''
-#     collapsed_list = []
-#     splitseq = seqstring.replace('[', ']').split(']')
-#     for i in splitseq:
-#         returnval = ''
-#         dosomething = False
-#         for j in i:
-#             if j in IUPAC_codes:
-#                 dosomething = True
-#         if dosomething:
-#             collapsed_list.append(i[-1])
-#         else:
-#             collapsed_list.append(i)
-#     return ''.join(collapsed_list)
-
-
 
 # print(amplicon_dict_builder(primersearch_results.amplifiers, template_seqrecords))
 

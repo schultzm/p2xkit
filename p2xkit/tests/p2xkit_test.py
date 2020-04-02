@@ -23,17 +23,11 @@ class BedTestCasePass(unittest.TestCase):
         result = Psearcher(self.template, self.primers, self.mismatch)
         result.psearchit()
         pcr_results = result.pcr_hits
-        # print(result.pcr_hits)
         self.assertEqual(pcr_results.amplifiers['N_Sarbeco_DE'][0].hit_info,
         """MN908947.3  
 	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
 	CACATTGGCACCCGCAATC hits forward strand at 28706 with 0 mismatches
 	GAGGAACGAGAAGAGGCTTG hits reverse strand at [1071] with 0 mismatches""")
-        # # # print(result())
-        # for key, value in pcr_results.amplifiers.items():
-        #     for i in value:
-        #         print(key, "\n", i.hit_info, i.length)
-        # self.assertEqual(Psearcher, 'x')
 
     def iupaccheck(self):
         inseq = Hit("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA")
