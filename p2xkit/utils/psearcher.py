@@ -35,21 +35,21 @@ class Hit:
         self.expanded = seqstring
     
     def collapse_iupac(self):
-    '''
-    Given an 'expanded' seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
-    return collapsed seqstring 'CARATGTTAAASACACTATTAGCATA' (with IUPAC codes).
-    '''
-    IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn'''
-    collapsed = ''
-    regions = self.expanded.replace('[', ']').split(']')
-    for region in regions:
-        IUPAC_letter = None
-        for nuc_letter in region:
-            if nuc_letter in IUPAC_codes:
-                IUPAC_letter = region[-1]
-        if IUPAC_letter:
-            collapsed += IUPAC_letter
-        else:
-            collapsed += region
-    self.collapsed = collapsed
+        '''
+        Given an 'expanded' seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
+        return collapsed seqstring 'CARATGTTAAASACACTATTAGCATA' (with IUPAC codes).
+        '''
+        IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn'''
+        collapsed = ''
+        regions = self.expanded.replace('[', ']').split(']')
+        for region in regions:
+            IUPAC_letter = None
+            for nuc_letter in region:
+                if nuc_letter in IUPAC_codes:
+                    IUPAC_letter = region[-1]
+            if IUPAC_letter:
+                collapsed += IUPAC_letter
+            else:
+                collapsed += region
+        self.collapsed = collapsed
 
