@@ -27,7 +27,15 @@ class Psearcher:
         psearchcl.outfile = "stdout"
         # print(psearchcl, file = sys.stderr)
         stdout, stderr = psearchcl()
+        # pcr_hits below is a primersearch OutputRecord
+        # The output record stores the results in an amplifiers object (dict):
+        # "key": primer-pair name (str)
+        #                    "value": hits (list), with each hit attributes:
+        #                               - hit_info
+        #                               - length
         self.pcr_hits = psearch.read(StringIO(stdout))
+        print(print(type(self.pcr_hits)))
+
         #  = primersearch_results
 
 class Hit:

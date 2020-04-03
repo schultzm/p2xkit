@@ -130,8 +130,8 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     subparser_modules.add_parser(
-        "test", help="""Run p2xkit tests""",
-        description="CRun p2xkit tests",
+        "test", help="""Run p2xkit unittests""",
+        description="Run p2xkit unittests",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     args = parser.parse_args()
 

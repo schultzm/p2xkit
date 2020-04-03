@@ -28,6 +28,8 @@ class BedTestCasePass(unittest.TestCase):
 	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
 	CACATTGGCACCCGCAATC hits forward strand at 28706 with 0 mismatches
 	GAGGAACGAGAAGAGGCTTG hits reverse strand at [1071] with 0 mismatches""")
+        for key, value in pcr_results.amplifiers.items():
+            print(key, value)
 
     def iupaccheck(self):
         inseq = Hit("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA")

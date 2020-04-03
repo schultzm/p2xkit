@@ -1,3 +1,9 @@
+# # Template seqs with key as seq.id
+# template_seqrecords = None
+# with open(sys.argv[1]) as input_handle:
+#     seqs = {seq.id: seq for seq in list(SeqIO.parse(input_handle, 'fasta'))}
+
+
 class Oligo_pair:
     def __init__(self, amplifiers_object, template_seqrecords):
         self.amplifiers_object = amplifiers_object
