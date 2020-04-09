@@ -65,5 +65,6 @@ class BedTestCasePass(unittest.TestCase):
         for primerpair_name, amplifier in pcr_results.amplifiers.items():
             for index, amplimer in enumerate(amplifier): # need the indices
                 print(primerpair_name, f"Amplimer {index}:", amplimer.hit_info)
-
-        # print(amplifiers)
+        # TODO: Iterate through hit, -1:-2 since sometimes a fasta record with
+        # a description will produce a header row in line 0, whereas
+        # so sometimes three rows and sometimes 2 in hit_info
