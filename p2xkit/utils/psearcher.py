@@ -13,43 +13,25 @@ class Psearcher:
     def psearchit(self):
         """
         run primersearch
-        return a dictionary of amplifier objects
-            keys are primer-pair names
-            values are amplifier
-                each amplifier is a list of PCR hits with attributes:
-                    hit_info
-                    length
+        return a dictionary of {key(primer pair name [str]):
+                                value ([list] of amplifiers)}
         """
         psearchcl = PrimerSearchCommandline()
         psearchcl.seqall = f"{self.template} -snucleotide1"
         psearchcl.infile = self.primers
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
-        # print(psearchcl, file = sys.stderr)
         stdout, stderr = psearchcl()
-        # pcr_hits below is a primersearch OutputRecord
-        # The output record stores the results in an amplifiers object (dict):
-        # "key": primer-pair name (str)
-        #                    "value": hits (list), with each hit attributes:
-        #                               - hit_info
-        #                               - length
-        self.pcr_hits = psearch.read(StringIO(stdout))
-        print(print(type(self.pcr_hits)))
+        return psearch.read(StringIO(stdout))
 
-        #  = primersearch_results
-
-class Hit:
-    def __init__(self, seqstring):
-        self.expanded = seqstring
-    
-    def collapsed_iupac(self):
+    def collapsed_iupac(self, primerstring):
         '''
         Given an 'expanded' seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
         return collapsed seqstring 'CARATGTTAAASACACTATTAGCATA' (with IUPAC codes).
         '''
         IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn'''
         collapsed = ''
-        regions = self.expanded.replace('[', ']').split(']')
+        regions = primerstring.replace('[', ']').split(']')
         for region in regions:
             IUPAC_letter = None
             for nuc_letter in region:
@@ -59,15 +41,18 @@ class Hit:
                 collapsed += IUPAC_letter
             else:
                 collapsed += region
-        self.collapsed = collapsed
+        return collapsed
 
-    def amplimers(self):
+    def amplimer(self, amplifier):
         '''
-        An amplimer is a PCR product amplified between a primer-pair.
-        return a dictionary of primersearch results.of each amplicon within each template,
-        Key is template name.
+        An amplimer is a PCR product between a primer-pair.
+        The amplifier is a dict, storing these data:
+            keys are primer-pair names
+            values are lists of amplifiers
+                each amplifier in amplifiers has attributes:
+                    hit_info (the amplimer)
+                    length (of amplimer)
         '''
-        amplifiers = self.amplifiers_object #type=dict
         amplicons = {primerpair: template_list for primerpair, template_list in amplifiers.items()}
         # return(amp_dict)
         for key, template_list in amp_dict.items:

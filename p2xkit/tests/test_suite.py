@@ -9,4 +9,5 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(BedTestCasePass("psearcher"))
     suite.addTest(BedTestCasePass("iupaccheck"))
+    suite.addTest(BedTestCasePass("amplifiers_parsed"))
     return suite
