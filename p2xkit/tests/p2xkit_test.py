@@ -7,7 +7,7 @@ import unittest
 from .. import (__parent_dir__,
                 __test_primers__,
                 __test_probes__,
-                __test_template__,
+                __test_template__, #maybe redundant with templates in place
                 __test_templates__)
 import pkg_resources
 from p2xkit.utils.psearcher import Psearcher#, Hit_parser
@@ -16,15 +16,15 @@ from p2xkit.utils.psearcher import Psearcher#, Hit_parser
 class BedTestCasePass(unittest.TestCase):
     maxDiff = None
     def setUp(self):
-        self.template = pkg_resources.resource_filename(__parent_dir__,
-                                                        __test_template__)
+        self.templates = pkg_resources.resource_filename(__parent_dir__,
+                                                        __test_templates__)
         self.primers  = pkg_resources.resource_filename(__parent_dir__,
                                                         __test_primers__)
         self.probes   = pkg_resources.resource_filename(__parent_dir__,
                                                         __test_probes__)
         self.mismatch = 20
-        self.templates = pkg_resources.resource_filename(__parent_dir__,
-                                                         __test_templates__)
+        # self.templates = pkg_resources.resource_filename(__parent_dir__,
+        #                                                  __test_templates__)
 
     def psearcher(self):
         reaction = Psearcher(self.template, self.primers, self.mismatch)
@@ -45,7 +45,7 @@ class BedTestCasePass(unittest.TestCase):
         # need to create a psearcher object,
         # but it's perhaps too much for a simple
         # string parser.  Maybe break out the iupac def in Psearcher
-        expanded = Psearcher(self.template,
+        expanded = Psearcher(self.templates,
                           self.primers,
                           self.mismatch)
         collapsed = expanded. \
@@ -57,11 +57,13 @@ class BedTestCasePass(unittest.TestCase):
                             self.primers,
                             self.mismatch)
         pcr_results = reaction.psearchit() # a PrimerSearch.OutputRecord
+        print(pcr_results)
         # The attribute of interest in the output record is 'amplifiers'
         # amplifiers is a dict.
         # key is primerpairname
         # value is an amplifier object [list].
         for primerpair_name, amplifier in pcr_results.amplifiers.items():
-            print(type(primerpair_name pri))
+            for index, amplimer in enumerate(amplifier): # need the indices
+                print(primerpair_name, f"Amplimer {index}:", amplimer.hit_info)
 
         # print(amplifiers)

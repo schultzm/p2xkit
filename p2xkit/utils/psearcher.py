@@ -22,6 +22,7 @@ class Psearcher:
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
         stdout, stderr = psearchcl()
+        print(stdout)
         return psearch.read(StringIO(stdout))
 
     def collapsed_iupac(self, primerstring):
@@ -53,7 +54,7 @@ class Psearcher:
                     hit_info (the amplimer)
                     length (of amplimer)
         '''
-        amplicons = {primerpair: template_list for primerpair, template_list in amplifiers.items()}
+        #amplicons = {primerpair: template_list for primerpair, template_list in amplifiers.items()}
         # return(amp_dict)
         for key, template_list in amp_dict.items:
             
