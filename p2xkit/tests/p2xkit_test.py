@@ -27,9 +27,9 @@ class BedTestCasePass(unittest.TestCase):
         #                                                  __test_templates__)
 
     def psearcher(self):
-        reaction = Psearcher(self.template, self.primers, self.mismatch)
-        self.pcr_results = reaction.psearchit()
-        self.assertEqual(self.pcr_results.amplifiers['N_Sarbeco_DE'][0]. \
+        reaction = Psearcher(self.templates, self.primers, self.mismatch)
+        pcr_results = reaction.psearchit()
+        self.assertEqual(pcr_results.amplifiers['N_Sarbeco_DE'][0]. \
                          hit_info,
         """MN908947.3  
 	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
@@ -56,15 +56,17 @@ class BedTestCasePass(unittest.TestCase):
         reaction = Psearcher(self.templates,
                             self.primers,
                             self.mismatch)
-        pcr_results = reaction.psearchit() # a PrimerSearch.OutputRecord
-        print(pcr_results)
+        reaction.psearchit() # get PrimerSearch.OutputRecords
+        reaction.amplimer_table()
+        print(table_list)
         # The attribute of interest in the output record is 'amplifiers'
         # amplifiers is a dict.
         # key is primerpairname
         # value is an amplifier object [list].
-        for primerpair_name, amplifier in pcr_results.amplifiers.items():
-            for index, amplimer in enumerate(amplifier): # need the indices
-                print(primerpair_name, f"Amplimer {index}:", amplimer.hit_info)
+
+        # for primerpair_name, amplifier in pcr_results.amplifiers.items():
+        #     for index, amplimer in enumerate(amplifier): # need the indices
+        #         print(primerpair_name, f"Amplimer {index}:", amplimer.hit_info)
         # TODO: Iterate through hit, -1:-2 since sometimes a fasta record with
-        # a description will produce a header row in line 0, whereas
+        # a description will produce a header row in line 0,
         # so sometimes three rows and sometimes 2 in hit_info
