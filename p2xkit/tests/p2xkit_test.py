@@ -28,8 +28,8 @@ class BedTestCasePass(unittest.TestCase):
 
     def psearcher(self):
         reaction = Psearcher(self.templates, self.primers, self.mismatch)
-        pcr_results = reaction.psearchit()
-        self.assertEqual(pcr_results.amplifiers['N_Sarbeco_DE'][0]. \
+        reaction.psearchit()
+        self.assertEqual(reaction.pcr_results.amplifiers['N_Sarbeco_DE'][0]. \
                          hit_info,
         """MN908947.3  
 	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
@@ -49,7 +49,7 @@ class BedTestCasePass(unittest.TestCase):
                           self.primers,
                           self.mismatch)
         collapsed = expanded. \
-                    collapsed_iupac("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA")
+                    _collapsed_iupac("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA")
         self.assertEqual("CARATGTTAAASACACTATTAGCATA", collapsed)
 
     def amplifiers_parsed(self):

@@ -4,8 +4,8 @@
 from Bio.Emboss import  PrimerSearch as psearch
 from Bio.Emboss.Applications import PrimerSearchCommandline
 from io import StringIO
-# from Bio import SeqIO, AlignIO
-# from Bio.Seq import Seq
+from Bio import SeqIO, AlignIO
+from Bio.Seq import Seq
 # from Bio.SeqRecord import SeqRecord
 # from Bio.Alphabet import IUPAC
 # from Bio.Align import MultipleSeqAlignment as MSA
