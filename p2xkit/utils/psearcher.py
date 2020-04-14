@@ -52,6 +52,7 @@ class Psearcher:
 
     def amplimer_table(self):
         '''
+        Fix this...
         An amplimer is a PCR product between a primer-pair.
         The amplifier is a dict, storing these data:
             keys are primer-pair names
@@ -63,7 +64,22 @@ class Psearcher:
         results_dfs_list = []
         for primerpair_name, amplifier in self.pcr_results.amplifiers.items():
             for index, amplimer in enumerate(amplifier): # need the indices
-                print(primerpair_name, f"Amplimer {index}:", amplimer.hit_info)
+                sub_df = {}
+                # print('index', index)
+                # print('amplimer', amplimer.hit_info)
+                hit = amplimer.hit_info.replace('\t', '').rstrip(' ').split('\n')
+                hit = [i.strip() for i in hit]
+                print(hit)
+                sub_df['amplimer_n'] = index
+                sub_df['template_name'] = hit[0]
+                sub_df['forward_oligo'] = Seq(self._collapsed_iupac(hit[-2].split(' ')[0]), alphabet = IUPAC.ambiguous_dna)
+                sub_df['reverse_oligo'] = Seq(self._collapsed_iupac(hit[-1].split(' ')[0]), alphabet = IUPAC.ambiguous_dna)
+                                        # 'strand': amplimer.hit_info[1][2],
+                                        # 'position': int(amplimer.hit_info[1][5]) - 1,
+                                        # 'mismatches': amplimer.hit_info[1][7]}
+
+                print(sub_df)
+                # print(primerpair_name, f"Amplimer {index}:", amplimer.hit_info)
 
         #amplicons = {primerpair: template_list for primerpair, template_list in amplifiers.items()}
         # return(amp_dict)
