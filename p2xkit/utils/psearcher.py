@@ -16,6 +16,7 @@ class Psearcher:
         self.template_seqs = {seq.id: seq for seq in list(SeqIO.parse(open(self.template, 'r'), 'fasta'))}
         self.primers = primers
         self.mismatch = mismatch
+        print(self.template_seqs)
 
     def psearchit(self):
         """
@@ -74,14 +75,17 @@ class Psearcher:
                     hit = [i.strip() for i in hit]
                     sub_df['amplimer_n'] = index+1
                     sub_df['template_name'] = hit[0]
+                    # print('HIT0', hit[0])
                     fwd = hit[-2].split(' ')
                     rev = hit[-1].split(' ')
-                    sub_df['forward_oligo'] = self._collapsed_iupac(fwd[0])#, alphabet = IUPAC.ambiguous_dna)
-                    sub_df['reverse_oligo'] = self._collapsed_iupac(rev[0])#, alphabet = IUPAC.ambiguous_dna)
-                    sub_df['forward_oligo_template_start'] = int(fwd[-4])
-                    sub_df['forward_oligo_template_end']   = sub_df['forward_oligo_template_start'] + len(sub_df['forward_oligo'])
-                    sub_df['reverse_oligo_template_end']   = len(self.template_seqs[sub_df['template_name']].seq) - int(rev[-4].replace('[', '').replace(']', ''))
-                    sub_df['reverse_oligo_template_start'] = sub_df['reverse_oligo_template_end'] - len(sub_df['reverse_oligo'])
+                    sub_df['fwd_oligo'] = self._collapsed_iupac(fwd[0]).upper#, alphabet = IUPAC.ambiguous_dna)
+                    sub_df['rev_oligo'] = self._collapsed_iupac(rev[0]).upper#, alphabet = IUPAC.ambiguous_dna)
+                    sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4])
+                    sub_df['fwd_oligo_tmplt_end']   = sub_df['fwd_oligo_tmplt_start'] + len(sub_df['fwd_oligo'])
+                    sub_df['rev_oligo_tmplt_end']   = len(self.template_seqs[hit[0]].seq) - int(rev[-4].replace('[', '').replace(']', ''))
+                    sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo'])
+                    sub_df['amplicon'] = str(self.template_seqs[hit[0]].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']].upper())
+                    print(sub_df['amplicon'])
                     df = pd.DataFrame(sub_df, index=[primerpair_name])
-                    results_dfs_list.append(df)
+                    # results_dfs_list.append(df)
         self.amplimer_tab = pd.concat(results_dfs_list)
