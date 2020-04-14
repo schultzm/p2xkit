@@ -75,11 +75,12 @@ class Psearcher:
                     hit = [i.strip() for i in hit]
                     sub_df['amplimer_n'] = index+1
                     sub_df['template_name'] = hit[0]
-                    # print('HIT0', hit[0])
                     fwd = hit[-2].split(' ')
                     rev = hit[-1].split(' ')
                     sub_df['fwd_oligo'] = self._collapsed_iupac(fwd[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
                     sub_df['rev_oligo'] = self._collapsed_iupac(rev[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
+                    sub_df['fwd_mismatches'] = int(fwd[-2]) 
+                    sub_df['rev_mismatches'] = int(rev[-2])
                     sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4])
                     sub_df['fwd_oligo_tmplt_end']   = sub_df['fwd_oligo_tmplt_start'] + len(sub_df['fwd_oligo'])
                     sub_df['rev_oligo_tmplt_end']   = len(self.template_seqs[hit[0]].seq) - int(rev[-4].replace('[', '').replace(']', ''))
@@ -88,7 +89,6 @@ class Psearcher:
                     sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']])
                     sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']])
                     sub_df['product']  = str(sub_df['fwd_oligo']+sub_df['amplicon']+Seq(sub_df['rev_oligo'], alphabet = IUPAC.ambiguous_dna).reverse_complement())
-                    # print(sub_df['amplicon'])
                     df = pd.DataFrame(sub_df, index=[primerpair_name])
                     results_dfs_list.append(df)
         self.amplimer_tab = pd.concat(results_dfs_list)
