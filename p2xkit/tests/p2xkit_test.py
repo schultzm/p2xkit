@@ -59,7 +59,7 @@ class BedTestCasePass(unittest.TestCase):
         reaction.psearchit() # get PrimerSearch.OutputRecords
         reaction.amplimer_table()
         # print(reaction.amplimer_tab.to_csv(sep="\t"))
-        self.assertEqual(reaction.amplimer_tab.iloc[4].loc['rev_match0mismatch1'], 'ACGATTGTGCATCAGCTGA')
+        self.assertEqual(reaction.amplimer_tab.iloc[4].loc['rev_match0mismatch1'], '0000000000000000000')
         # print(table_list)
         # The attribute of interest in the output record is 'amplifiers'
         # amplifiers is a dict.
