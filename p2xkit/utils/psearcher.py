@@ -116,14 +116,5 @@ class Psearcher:
                     results_dfs_list.append(df)
         
         self.amplimer_tab = pd.concat(results_dfs_list)
-        # print(self.amplimer_tab.to_csv(sep="\t"))
-        # print(self.amplimer_tab[['amplicon_full', 'fwd_oligo', 'fwd_oligo_match', 'fwd_match0mismatch1']].to_csv(sep="\t"))
-        # for key, value in self.amplimer_tab.dtypes.items():
-        #     if value=='float64':
-        #         df = df.astype({'col_name_2':'float64', 'col_name_3':'float64'})
-        # self.amplimer_tab.apply(pd.to_numeric(downcast='integer'), errors='ignore', inplace=True)
-        # print(self.amplimer_tab)
-        # for key, value in self.amplimer_tab.dtypes.items():
-        #     print(key, value)
 
-            
+# TODO convert float columns to integers

@@ -11,6 +11,7 @@ from .. import (__parent_dir__,
                 __test_templates__)
 import pkg_resources
 from p2xkit.utils.psearcher import Psearcher#, Hit_parser
+from p2xkit.utils.bowtier import Bowtier
 
 
 class BedTestCasePass(unittest.TestCase):
@@ -57,18 +58,9 @@ class BedTestCasePass(unittest.TestCase):
                             self.primers,
                             self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
-        reaction.amplimer_table()
-        # print(reaction.amplimer_tab.to_csv(sep="\t"))
+        reaction.amplimer_table() # get the full table
         self.assertEqual(reaction.amplimer_tab.iloc[4].loc['rev_match0mismatch1'], '0000000000000000000')
-        # print(table_list)
-        # The attribute of interest in the output record is 'amplifiers'
-        # amplifiers is a dict.
-        # key is primerpairname
-        # value is an amplifier object [list].
 
-        # for primerpair_name, amplifier in pcr_results.amplifiers.items():
-        #     for index, amplimer in enumerate(amplifier): # need the indices
-        #         print(primerpair_name, f"Amplimer {index}:", amplimer.hit_info)
-        # TODO: Iterate through hit, -1:-2 since sometimes a fasta record with
-        # a description will produce a header row in line 0,
-        # so sometimes three rows and sometimes 2 in hit_info
+    def bowtiecheck(self):
+        mapped = Bowtier(self.probes)
+        print(mapped)
