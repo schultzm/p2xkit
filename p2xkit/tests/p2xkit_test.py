@@ -61,6 +61,11 @@ class BedTestCasePass(unittest.TestCase):
         reaction.amplimer_table() # get the full table
         self.assertEqual(reaction.amplimer_tab.iloc[4].loc['rev_match0mismatch1'], '0000000000000000000')
 
+    def bowtie_index(self)
+        indexed = Bowtier(self.templates)
+        indexed.indexit()
+        self.assertEqual(indexed, 'x')
     def bowtiecheck(self):
-        mapped = Bowtier(self.probes)
-        print(mapped)
+        mapped = Bowtier(self.probes, self.templates)
+        mapped.bowtieit()
+        self.assertEqual(mapped, 'x')
