@@ -5,7 +5,7 @@ from Bio.Seq import Seq
 from Bio.Alphabet import IUPAC
 from Bio.Align import MultipleSeqAlignment as MSA
 import pandas as pd
-
+from Bio.Data.IUPACData import ambiguous_dna_values
 from io import StringIO
 import sys
 import Bio
@@ -52,6 +52,24 @@ class Psearcher:
                 collapsed += region
         return collapsed
 
+    def _iupac_zipper(self, seq1, seq2):
+        zipped = list(zip([i for i in seq1], [i for i in seq2]))
+        binrep = ''
+        # print(ambiguous_dna_values)
+        for i in zipped:
+            a = [j for j in ambiguous_dna_values[i[0]]]
+            b = [j for j in ambiguous_dna_values[i[1]]]
+            # print(zipped)
+            # print(a, b)
+            intersection = set(a).intersection(set(b))
+            if intersection:
+            # if len():
+                binrep += f"{0}"
+            else:
+                binrep += f"{1}"
+        return binrep
+
+
     def amplimer_table(self):
         '''
         Fix this...
@@ -81,14 +99,28 @@ class Psearcher:
                     sub_df['rev_oligo'] = self._collapsed_iupac(rev[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
                     sub_df['fwd_mismatches'] = int(fwd[-2]) 
                     sub_df['rev_mismatches'] = int(rev[-2])
-                    sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4])
+                    sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4]) - 1
                     sub_df['fwd_oligo_tmplt_end']   = sub_df['fwd_oligo_tmplt_start'] + len(sub_df['fwd_oligo'])
                     sub_df['rev_oligo_tmplt_end']   = len(self.template_seqs[hit[0]].seq) - int(rev[-4].replace('[', '').replace(']', ''))
-                    sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo'])
-                    sub_df['amplicon'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_end']:sub_df['rev_oligo_tmplt_start']].upper())
-                    sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']])
-                    sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']])
-                    sub_df['product']  = str(sub_df['fwd_oligo']+sub_df['amplicon']+Seq(sub_df['rev_oligo'], alphabet = IUPAC.ambiguous_dna).reverse_complement())
+                    sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo']) - 1
+                    sub_df['amplicon_insert'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_end']-1:sub_df['rev_oligo_tmplt_start']+1].upper())
+                    sub_df['amplicon_full'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']].upper())
+                    sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']]).upper()
+                    sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']].reverse_complement()).upper()
+                    sub_df['product'] = str(sub_df['fwd_oligo']+sub_df['amplicon_insert']+Seq(sub_df['rev_oligo'], alphabet = IUPAC.ambiguous_dna).reverse_complement())
+                    sub_df['fwd_match0mismatch1'] = self._iupac_zipper(sub_df['fwd_oligo'], sub_df['fwd_oligo_match'])
+                    sub_df['rev_match0mismatch1'] = self._iupac_zipper(sub_df['rev_oligo'], sub_df['rev_oligo_match'])
                     df = pd.DataFrame(sub_df, index=[primerpair_name])
                     results_dfs_list.append(df)
+        
         self.amplimer_tab = pd.concat(results_dfs_list)
+        # print(self.amplimer_tab[['amplicon_full', 'fwd_oligo', 'fwd_oligo_match', 'fwd_match0mismatch1']].to_csv(sep="\t"))
+        # for key, value in self.amplimer_tab.dtypes.items():
+        #     if value=='float64':
+        #         df = df.astype({'col_name_2':'float64', 'col_name_3':'float64'})
+        # self.amplimer_tab.apply(pd.to_numeric(downcast='integer'), errors='ignore', inplace=True)
+        # print(self.amplimer_tab)
+        # for key, value in self.amplimer_tab.dtypes.items():
+        #     print(key, value)
+
+            
