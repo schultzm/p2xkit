@@ -10,6 +10,6 @@ def suite():
     suite.addTest(BedTestCasePass("psearcher"))
     suite.addTest(BedTestCasePass("iupaccheck"))
     suite.addTest(BedTestCasePass("amplifiers_parsed"))
-    suite.addTest(BedTestCasePass("bowite_index"))
-    suite.addTest(BedTestCasePass("bowtie_map"))
+    suite.addTest(BedTestCasePass("blast_orientate"))
+    suite.addTest(BedTestCasePass("mafft_aln"))
     return suite
