@@ -11,7 +11,7 @@ from .. import (__parent_dir__,
                 __test_templates__)
 import pkg_resources
 from p2xkit.utils.psearcher import Psearcher#, Hit_parser
-from p2xkit.utils.bowtier import Bowtier
+from p2xkit.utils.maffter import Mafft_aln
 
 
 class BedTestCasePass(unittest.TestCase):
@@ -59,8 +59,10 @@ class BedTestCasePass(unittest.TestCase):
                             self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         reaction.amplimer_table() # get the full table
+        print(reaction.amplimer_tab.to_csv(sep="\t"))
         self.assertEqual(reaction.amplimer_tab.iloc[4].loc['rev_match0mismatch1'], '0000000000000000000')
 
+<<<<<<< HEAD
     def bowtie_index(self):
         indexed = Bowtier(self.templates)
         indexed.indexit()
@@ -69,3 +71,15 @@ class BedTestCasePass(unittest.TestCase):
         mapped = Bowtier(self.probes, self.templates)
         mapped.bowtieit()
         self.assertEqual(mapped, 'x')
+=======
+    def blast_orientate(self):
+        orientated = Mafft_aln(self.templates)
+        # indexed.indexit()
+        self.assertEqual(orientated, 'x')
+
+    def mafft_aln(self):
+        # indexed = Bowtier(self.templates)
+        pass
+        # mapped.bowtieit()
+        # self.assertEqual(mapped, 'x')
+>>>>>>> 75e15d93f1f505cfbd5d3ae082b668142e304b76
