@@ -5,18 +5,20 @@ import shlex
 from subprocess import Popen, PIPE
 import pysam
 from collections import defaultdict
+from pathlib import Path, PurePath
 
 class Bowtier:
-    def __init__(self, probe, template):
-        self.probes = probe
-        self.template = template
-        pass
+    def __init__(self, probetable, templates):
+        self.probes = probetable
+        self.templates = templates #PurePath
 
     def indexit(self):
         # Template strand bowtie2 index files generation
-        template_bowtie2_idx_fnames = list(Path(PurePath(template_fasta).parent).glob(f"{template_fasta.stem}.*.bt2"))
+        # print()
+        template_bowtie2_idx_fnames = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
         if len(template_bowtie2_idx_fnames) != 6:
-            os.system(f"bowtie2-build -f {template_fasta} {PurePath(template_fasta.parent, template_fasta.stem)}")
+            cmd = f"bowtie2-build -f {self.templates} {PurePath(self.templates.parent, self.templates.stem)}"
+            os.system(cmd)
 
     def bowtieit(self):
         pass

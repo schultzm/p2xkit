@@ -15,7 +15,7 @@ Unit Tests.
 """
 
 import unittest
-# from pathlib import Path, PurePath
+from pathlib import Path, PurePath
 from .. import (__parent_dir__,
                 __test_primers__,
                 __test_probes__,
@@ -29,12 +29,12 @@ from p2xkit.utils.bowtier import Bowtier
 class BedTestCasePass(unittest.TestCase):
     maxDiff = None
     def setUp(self):
-        self.templates = pkg_resources.resource_filename(__parent_dir__,
-                                                        __test_templates__)
-        self.primers  = pkg_resources.resource_filename(__parent_dir__,
-                                                        __test_primers__)
-        self.probes   = pkg_resources.resource_filename(__parent_dir__,
-                                                        __test_probes__)
+        self.templates = Path(PurePath(pkg_resources.resource_filename(__parent_dir__,
+                                                        __test_templates__)))
+        self.primers  = Path(PurePath(pkg_resources.resource_filename(__parent_dir__,
+                                                        __test_primers__)))
+        self.probes   = Path(PurePath(pkg_resources.resource_filename(__parent_dir__,
+                                                        __test_probes__)))
         self.mismatch = 20
         # self.templates = pkg_resources.resource_filename(__parent_dir__,
         #                                                  __test_templates__)
@@ -70,9 +70,9 @@ class BedTestCasePass(unittest.TestCase):
                             self.primers,
                             self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
-        self.reaction.amplimer_table() # get the full table
+        reaction.amplimer_table() # get the full table
         # print(reaction.amplimer_tab.to_csv(sep="\t"))
-        self.assertEqual(self.reaction.amplimer_tab.iloc[4].loc['rev_match0mismatch1'], '0000000000000000000')
+        self.assertEqual(reaction.amplimer_tab.iloc[4].loc['rev_match0mismatch1'], '0000000000000000000')
 
     def bowtie_index(self):
         reaction = Psearcher(self.templates,
@@ -80,10 +80,11 @@ class BedTestCasePass(unittest.TestCase):
                     self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         reaction.amplimer_table()
-        indexed = Bowtier(self.probes, self.templates)
+        indexed = Bowtier(reaction, self.templates)
         indexed.indexit()
-        self.assertEqual(indexed, 'x')
-    def bowtie_map(self):
-        mapped = Bowtier(self.probes, self.templates)
-        mapped.bowtieit()
-        self.assertEqual(mapped, 'x')
+        indexes = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
+        # self.assertEqual(indexes, 'x')
+    # def bowtie_map(self):
+    #     mapped = Bowtier(self.probes, self.templates)
+    #     mapped.bowtieit()
+    #     self.assertEqual(mapped, 'x')
