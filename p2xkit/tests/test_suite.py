@@ -11,5 +11,5 @@ def suite():
     suite.addTest(BedTestCasePass("iupaccheck"))
     suite.addTest(BedTestCasePass("amplifiers_parsed"))
     suite.addTest(BedTestCasePass("bowtie_index"))
-    #suite.addTest(BedTestCasePass("bowtie_map"))
+    suite.addTest(BedTestCasePass("bowtie_map"))
     return suite
