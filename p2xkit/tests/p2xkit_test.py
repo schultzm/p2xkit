@@ -81,10 +81,10 @@ class BedTestCasePass(unittest.TestCase):
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table()
         indexed = Bowtier(self.templates)
-        indexes = indexed.indexit()
+        indexed.indexit()
         # indexes = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
         # print(indexes)
-        self.assertEqual(indexes[0], PosixPath('/home/schultzm/jobs/mdu/virus/corona/primersearch/p2xkit/p2xkit/data/templates.3.bt2'))
+        self.assertEqual(indexed.bowtieindex[0].suffix, '.bt2')
         # for i in indexes:
         #     i.unlink() #remove all the index files
     def bowtie_map(self):
