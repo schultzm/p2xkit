@@ -23,13 +23,13 @@ class Bowtier:
         self.bowtieindex = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
 
     def bowtieit(self, amplimer_table, probes):
+        print(amplimer_table)
+        probes_dict = defaultdict(list)
         with open(probes, 'r') as input_handle:
             probes = list(SeqIO.parse(input_handle, 'fasta'))
-            probes_dict = defaultdict(list)
             for probe in probes:
                 probes_dict[probe.id].append(probe)
-            # {probe.id: probe for probe in list(SeqIO.parse(input_handle, 'fasta'))}
-            print(probes_dict)
-        
-        # bowtie2_map_cmd = shlex.split(f"bowtie2 -x {PurePath(template_fasta.parent, template_fasta.stem)} -U {probe.seq} -c -a --end-to-end --very-sensitive")
-        pass
+        # for primerset in amplimer_table.index:
+            # print(primerset)
+        # run_cmd = shlex.split(f"bowtie2 -x {PurePath(self.templates.parent, self.templates.stem)} -U {probe.seq} -c -a --end-to-end --very-sensitive")# for probe in value]
+        # print(run_cmd)

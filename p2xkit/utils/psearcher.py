@@ -93,6 +93,8 @@ class Psearcher:
                     sub_df = {}
                     hit = amplimer.hit_info.replace('\t', '').rstrip(' ').split('\n')
                     hit = [i.strip() for i in hit]
+                    #set primer_pari column
+                    sub_df['primer_pair'] = primerpair_name
                     sub_df['amplimer_n'] = index+1
                     sub_df['template_name'] = hit[0]
                     fwd = hit[-2].split(' ')
@@ -114,7 +116,14 @@ class Psearcher:
                     sub_df['rev_match0mismatch1'] = self._iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
                     df = pd.DataFrame(sub_df, index=[primerpair_name])
                     results_dfs_list.append(df)
-        
-        return pd.concat(results_dfs_list)
+        return pd.concat(results_dfs_list, ignore_index=True)
+        # results['primer_pair'] = pd.Series(results.index.values).apply(lambda x: f"{x}")
+        # print(results.primer_pair)
+        # print(results)
+        # results.reset_index()
+        # results.index = range(0, len(results.index))
+        # results.index = range()
+        # print(results.to_csv(sep="\t"))
+        # return results
 
 # TODO convert float columns to integers

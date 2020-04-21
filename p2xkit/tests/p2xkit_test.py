@@ -93,6 +93,7 @@ class BedTestCasePass(unittest.TestCase):
                     self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table()
+
         # print(amplimer_table.to_csv(sep="\t"))
         indexed = Bowtier(self.templates)
         indexed.indexit()
