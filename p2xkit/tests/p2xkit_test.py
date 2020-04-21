@@ -80,7 +80,7 @@ class BedTestCasePass(unittest.TestCase):
                     self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table()
-        indexed = Bowtier(reaction, self.templates)
+        indexed = Bowtier(self.templates)
         indexes = indexed.indexit()
         # indexes = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
         # print(indexes)
@@ -93,10 +93,10 @@ class BedTestCasePass(unittest.TestCase):
                     self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table()
-        print(amplimer_table.to_csv(sep="\t"))
-        indexed = Bowtier(amplimer_table, self.templates)
-        indexes = indexed.indexit()
-        mapped = Bowtier(self.probes, self.templates)
-        mapped.bowtieit(amplimer_table)
+        # print(amplimer_table.to_csv(sep="\t"))
+        indexed = Bowtier(self.templates)
+        indexed.indexit()
+        mapped = indexed.bowtieit(amplimer_table, self.probes)
+        # mapped.bowtieit(amplimer_table, self.probes)
         
         self.assertEqual(mapped, 'x')
