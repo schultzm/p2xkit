@@ -95,8 +95,31 @@ class Bowtier:
                     sub_df = pd.DataFrame(records_subset, index=[records_subset['name']])
                     map_results_dfs.append(sub_df)
     
-        results = pd.concat(map_results_dfs)
-        return results
+        results = pd.concat(map_results_dfs, ignore_index=True)
+        results.rename(columns={'name': 'probe_name',
+                                'ref_name': 'template_name'}, 
+                       inplace=True)
+        import numpy as np
+        arrays = [np.array(results.primer_pair.values),
+                  np.array(results.template_name.values)]
+        # print(arrays)
+        column_order = ["primer_pair",
+                        "template_name",
+                        "probe_name",
+                        "probe_template_start",
+                        "probe_template_end",
+                        "flag",
+                        # "ref_pos",
+                        "probe_length",
+                        "probe_length_aligned",
+                        "probe_globally_aligned",
+                        "probe_seq",
+                        "probe_orientation",
+                        "probe_match",
+                        "probe_match_mismatch"]
+        # pd.MultiIndex()results
+        pd.MultiIndex.from_arrays(arrays, names=['primer_pair', 'template_name'])
+        return results[column_order]
         #                     # if rec.flag == 16:
         #                     #         seq_str = probe.seq.reverse_complement()
         # #                         id = f'probe_{idx}_rcomp_{str(primerpair)}'

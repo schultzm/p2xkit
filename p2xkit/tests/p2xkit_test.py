@@ -96,12 +96,12 @@ class BedTestCasePass(unittest.TestCase):
         mapped = indexed.bowtieit(amplimer_table, self.probes)
         # mapped.bowtieit(amplimer_table, self.probes)
         
-        self.assertEqual(mapped.iloc[4,5], '13377')
+        self.assertEqual(mapped.iloc[4,6], 28)
         self.assertEqual(mapped.iloc[4,6], 28)
 
         print(amplimer_table.to_csv(sep="\t"))
         print(mapped.to_csv(sep="\t"))
-
+        # need to match up the primerpair_name, template name, coordinates of probe hit, then add to new table
         for i in indexed.bowtieindex:
             i.unlink() #remove all the index files
 
