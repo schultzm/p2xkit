@@ -9,6 +9,7 @@ def suite():
     suite = unittest.TestSuite()
     suite.addTest(BedTestCasePass("psearcher"))
     suite.addTest(BedTestCasePass("iupaccheck"))
+    suite.addTest(BedTestCasePass("iupaczipper"))
     suite.addTest(BedTestCasePass("amplifiers_parsed"))
     suite.addTest(BedTestCasePass("bowtie_index"))
     suite.addTest(BedTestCasePass("bowtie_map"))

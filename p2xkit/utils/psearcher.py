@@ -34,16 +34,12 @@ def _iupac_zipper(seq1, seq2):
     # print('seq1', seq1)
     # print('seq2', seq2)
     zipped = list(zip([i for i in seq1.upper()], [i for i in seq2.upper()]))
-    # print(zipped)
     binrep = ''
-    # print(ambiguous_dna_values)
     for i in zipped:
         a = [j for j in ambiguous_dna_values[i[0]]]
         b = [j for j in ambiguous_dna_values[i[1]]]
-        # print(a, b)
         intersection = set(a).intersection(set(b))
         if intersection:
-        # if len():
             binrep += f"="
         else:
             binrep += f"X"

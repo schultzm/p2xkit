@@ -57,6 +57,10 @@ class BedTestCasePass(unittest.TestCase):
         self.assertEqual("CARATGTTAAASACACTATTAGCATA",
                          _collapsed_iupac("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA"))
 
+    def iupaczipper(self):
+        self.assertEqual(_iupac_zipper('CCAGGTGGWACRTCATCMGGTGATGC', 'CCAGGTGGAACCTCATCAGGAGATGC'),
+                         "'===========X========X=====")
+
     def amplifiers_parsed(self):
         reaction = Psearcher(self.templates,
                             self.primers,
@@ -93,6 +97,11 @@ class BedTestCasePass(unittest.TestCase):
         # mapped.bowtieit(amplimer_table, self.probes)
         
         self.assertEqual(mapped.iloc[4,5], '13377')
+        self.assertEqual(mapped.iloc[4,6], 28)
+
+        print(amplimer_table.to_csv(sep="\t"))
+        print(mapped.to_csv(sep="\t"))
+
         for i in indexed.bowtieindex:
             i.unlink() #remove all the index files
 
