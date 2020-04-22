@@ -77,7 +77,7 @@ class BedTestCasePass(unittest.TestCase):
         # indexes = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
         # print(indexes)
         self.assertEqual(indexed.bowtieindex[0].suffix, '.bt2')
-        for i in indexes:
+        for i in indexed.bowtieindex:
             i.unlink() #remove all the index files
     def bowtie_map(self):
         reaction = Psearcher(self.templates,
@@ -92,4 +92,7 @@ class BedTestCasePass(unittest.TestCase):
         mapped = indexed.bowtieit(amplimer_table, self.probes)
         # mapped.bowtieit(amplimer_table, self.probes)
         
-        self.assertEqual(mapped, 'x')
+        self.assertEqual(mapped.iloc[4,5], '13377')
+        for i in indexed.bowtieindex:
+            i.unlink() #remove all the index files
+

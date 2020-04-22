@@ -21,7 +21,7 @@ class Bowtier:
         # Template strand bowtie2 index files generation
         template_bowtie2_idx_fnames = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
         if len(template_bowtie2_idx_fnames) != 6:
-            cmd = f"bowtie2-build -f {self.templates} {PurePath(self.templates.parent, self.templates.stem)}"
+            cmd = f"bowtie2-build -q -f {self.templates} {PurePath(self.templates.parent, self.templates.stem)}"
             os.system(cmd)
         self.bowtieindex = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
 
