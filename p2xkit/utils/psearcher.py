@@ -44,10 +44,10 @@ def _iupac_zipper(seq1, seq2):
         intersection = set(a).intersection(set(b))
         if intersection:
         # if len():
-            binrep += f"{0}"
+            binrep += f"="
         else:
-            binrep += f"{1}"
-    return binrep
+            binrep += f"X"
+    return f"'{binrep}"
 
 
 class Psearcher:
@@ -114,8 +114,8 @@ class Psearcher:
                     sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']]).upper()
                     sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']]).upper()
                     sub_df['product'] = str(sub_df['fwd_oligo']+sub_df['amplicon_insert']+Seq(sub_df['rev_oligo'], alphabet=IUPAC.ambiguous_dna).reverse_complement())
-                    sub_df['fwd_match0mismatch1'] = _iupac_zipper(sub_df['fwd_oligo'], sub_df['fwd_oligo_match'])
-                    sub_df['rev_match0mismatch1'] = _iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
+                    sub_df['fwd_match_mismatch'] = _iupac_zipper(sub_df['fwd_oligo'], sub_df['fwd_oligo_match'])
+                    sub_df['rev_match_mismatch'] = _iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
                     df = pd.DataFrame(sub_df, index=[primerpair_name])
                     results_dfs_list.append(df)
         return pd.concat(results_dfs_list, ignore_index=True)

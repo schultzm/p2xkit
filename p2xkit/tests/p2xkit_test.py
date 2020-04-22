@@ -22,8 +22,8 @@ from .. import (__parent_dir__,
                 __test_template__, #maybe redundant with templates in place
                 __test_templates__)
 import pkg_resources
-from p2xkit.utils.psearcher import Psearcher, _collapsed_iupac, _iupac_zipper #, Hit_parser
-from p2xkit.utils.bowtier import Bowtier
+from ..utils.psearcher import Psearcher, _collapsed_iupac, _iupac_zipper #, Hit_parser
+from ..utils.bowtier import Bowtier
 
 
 class BedTestCasePass(unittest.TestCase):
@@ -64,7 +64,7 @@ class BedTestCasePass(unittest.TestCase):
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table() # get the full table
         # print(reaction.amplimer_tab.to_csv(sep="\t"))
-        self.assertEqual(amplimer_table.iloc[4].loc['rev_match0mismatch1'], '0000000000000000000')
+        self.assertEqual(amplimer_table.iloc[4].loc['rev_match_mismatch'], "'===================")
 
     def bowtie_index(self):
         reaction = Psearcher(self.templates,
