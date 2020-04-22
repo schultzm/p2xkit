@@ -84,7 +84,7 @@ class Psearcher:
         results_dfs_list = []
         for primerpair_name, amplifier in self.pcr_results.amplifiers.items():
             if not amplifier: # i.e., if list is empty
-                df = pd.DataFrame({'primer_pair', primerpair_name}, index=[primerpair_name])
+                df = pd.DataFrame({'primer_pair': primerpair_name}, index=[primerpair_name])
                 results_dfs_list.append(df)
             else:
                 for index, amplimer in enumerate(amplifier): # need the indices
