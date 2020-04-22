@@ -7,6 +7,8 @@ import pysam
 from collections import defaultdict
 from pathlib import Path, PurePath
 from Bio import SeqIO
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
 import pandas as pd
 from ..utils.psearcher import _iupac_zipper
 
@@ -26,6 +28,12 @@ class Bowtier:
         self.bowtieindex = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
 
     def bowtieit(self, amplimer_table, probes):
+        pre_fasta = amplimer_table[['primer_pair', 'template_name', 'amplimer_n', 'amplicon_insert']]
+        for rown in pre_fasta.index.values:
+            subseq = SeqR
+
+
+
         map_results_dfs = [] 
         # Bowtie2 summary of options used
         #     # -L <int>           length of seed substrings; must be >3, <32 (22)
