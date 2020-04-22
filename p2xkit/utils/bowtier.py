@@ -43,7 +43,7 @@ class Bowtier:
         with open(probes, 'r') as input_handle:
             probes = list(SeqIO.parse(input_handle, 'fasta'))
             for probe in probes:
-                probes_dict[probe.description].append(probe)
+                probes_dict[probe.description] = probe # Need to specify that probe names must be same as primer_pair with a space and then a probe identifier (e.g., 'RdRP_SARSr_DE P2')
         print(probes_dict)
         # for primerpair_name, probes_list in probes_dict.items():
         #     map_cmds = [(f"bowtie2 -x {PurePath(self.templates.parent, self.templates.stem)} -U {tqmanprobe.seq} -c --all --end-to-end --very-sensitive -L 3 -N 1 --np 0 -R 10", tqmanprobe.description) for tqmanprobe in probes_list]
@@ -67,6 +67,8 @@ class Bowtier:
                     records_subset = {key: value for key, value in records.items() if key in keys_to_keep}
                     records_subset = {**probe_range, **records_subset}
                     records_subset['probe_length'] = len(probes_dict[records_subset['name']].seq)
+                    records_subset['probe_length_aligned'] = records_subset['probe_template_end']-records_subset['probe_template_start']+1 #+1 as e.g., template matches at 21,22,23,24,25 are 5 matches but 25-21=4
+                    records_subset['probe_globally_aligned'] = ''.join(['True' if records_subset['probe_length_aligned']==records_subset['probe_length'] else 'False'])
                     print(records_subset)
         #             sub_df = pd.DataFrame(record, index=[record['name']])
         #             map_results_dfs.append(sub_df)
