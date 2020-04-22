@@ -64,7 +64,7 @@ class BedTestCasePass(unittest.TestCase):
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table() # get the full table
         # print(reaction.amplimer_tab.to_csv(sep="\t"))
-        self.assertEqual(amplimer_table.iloc[4].loc['rev_match_mismatch'], "'===================")
+        self.assertEqual(amplimer_table.iloc[4].loc['rev_match_mismatch'], "'========================")
 
     def bowtie_index(self):
         reaction = Psearcher(self.templates,
@@ -77,8 +77,8 @@ class BedTestCasePass(unittest.TestCase):
         # indexes = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
         # print(indexes)
         self.assertEqual(indexed.bowtieindex[0].suffix, '.bt2')
-        # for i in indexes:
-        #     i.unlink() #remove all the index files
+        for i in indexes:
+            i.unlink() #remove all the index files
     def bowtie_map(self):
         reaction = Psearcher(self.templates,
                     self.primers,
