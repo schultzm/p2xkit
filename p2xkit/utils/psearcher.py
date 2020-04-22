@@ -84,7 +84,7 @@ class Psearcher:
         results_dfs_list = []
         for primerpair_name, amplifier in self.pcr_results.amplifiers.items():
             if not amplifier: # i.e., if list is empty
-                df = pd.DataFrame({}, index=[primerpair_name])
+                df = pd.DataFrame({'primer_pair', primerpair_name}, index=[primerpair_name])
                 results_dfs_list.append(df)
             else:
                 for index, amplimer in enumerate(amplifier): # need the indices
@@ -114,7 +114,7 @@ class Psearcher:
                     sub_df['rev_match_mismatch'] = _iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
                     df = pd.DataFrame(sub_df, index=[primerpair_name])
                     results_dfs_list.append(df)
-        return pd.concat(results_dfs_list)
+        return pd.concat(results_dfs_list, ignore_index=True)
         # results['primer_pair'] = pd.Series(results.index.values).apply(lambda x: f"{x}")
         # print(results.primer_pair)
         # print(results)
