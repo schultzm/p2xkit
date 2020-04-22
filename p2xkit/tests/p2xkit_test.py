@@ -22,7 +22,7 @@ from .. import (__parent_dir__,
                 __test_template__, #maybe redundant with templates in place
                 __test_templates__)
 import pkg_resources
-from p2xkit.utils.psearcher import Psearcher#, Hit_parser
+from p2xkit.utils.psearcher import Psearcher, _collapsed_iupac, _iupac_zipper #, Hit_parser
 from p2xkit.utils.bowtier import Bowtier
 
 
@@ -54,16 +54,8 @@ class BedTestCasePass(unittest.TestCase):
                 # print(val.hit_info)
 
     def iupaccheck(self):
-        #this is weird.
-        # need to create a psearcher object,
-        # but it's perhaps too much for a simple
-        # string parser.  Maybe break out the iupac def in Psearcher
-        expanded = Psearcher(self.templates,
-                          self.primers,
-                          self.mismatch)
-        collapsed = expanded. \
-                    _collapsed_iupac("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA")
-        self.assertEqual("CARATGTTAAASACACTATTAGCATA", collapsed)
+        self.assertEqual("CARATGTTAAASACACTATTAGCATA",
+                         _collapsed_iupac("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA"))
 
     def amplifiers_parsed(self):
         reaction = Psearcher(self.templates,

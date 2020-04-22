@@ -10,6 +10,46 @@ from io import StringIO
 import sys
 import Bio
 
+# Moved next two functions to module scope
+def _collapsed_iupac(primerstring):
+    '''
+    Given an 'expanded' seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
+    return collapsed seqstring 'CARATGTTAAASACACTATTAGCATA' (with IUPAC codes).
+    '''
+    IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn''' #allows upper and lowercase iupac
+    collapsed = ''
+    regions = primerstring.replace('[', ']').split(']')
+    for region in regions:
+        IUPAC_letter = None
+        for nuc_letter in region:
+            if nuc_letter in IUPAC_codes:
+                IUPAC_letter = region[-1]
+        if IUPAC_letter:
+            collapsed += IUPAC_letter
+        else:
+            collapsed += region
+    return collapsed
+
+def _iupac_zipper(seq1, seq2):
+    # print('seq1', seq1)
+    # print('seq2', seq2)
+    zipped = list(zip([i for i in seq1.upper()], [i for i in seq2.upper()]))
+    # print(zipped)
+    binrep = ''
+    # print(ambiguous_dna_values)
+    for i in zipped:
+        a = [j for j in ambiguous_dna_values[i[0]]]
+        b = [j for j in ambiguous_dna_values[i[1]]]
+        # print(a, b)
+        intersection = set(a).intersection(set(b))
+        if intersection:
+        # if len():
+            binrep += f"{0}"
+        else:
+            binrep += f"{1}"
+    return binrep
+
+
 class Psearcher:
     def __init__(self, template, primers, mismatch):
         self.template = template
@@ -32,44 +72,6 @@ class Psearcher:
         stdout, stderr = psearchcl()
         # print(stdout)
         self.pcr_results = psearch.read(StringIO(stdout))
-
-    def _collapsed_iupac(self, primerstring):
-        '''
-        Given an 'expanded' seqstring, 'CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA',
-        return collapsed seqstring 'CARATGTTAAASACACTATTAGCATA' (with IUPAC codes).
-        '''
-        IUPAC_codes = '''RYSWKMBDHVNryswkmbdhvn'''
-        collapsed = ''
-        regions = primerstring.replace('[', ']').split(']')
-        for region in regions:
-            IUPAC_letter = None
-            for nuc_letter in region:
-                if nuc_letter in IUPAC_codes:
-                    IUPAC_letter = region[-1]
-            if IUPAC_letter:
-                collapsed += IUPAC_letter
-            else:
-                collapsed += region
-        return collapsed
-
-    def _iupac_zipper(self, seq1, seq2):
-        # print('seq1', seq1)
-        # print('seq2', seq2)
-        zipped = list(zip([i for i in seq1], [i for i in seq2]))
-        # print(zipped)
-        binrep = ''
-        # print(ambiguous_dna_values)
-        for i in zipped:
-            a = [j for j in ambiguous_dna_values[i[0]]]
-            b = [j for j in ambiguous_dna_values[i[1]]]
-            # print(a, b)
-            intersection = set(a).intersection(set(b))
-            if intersection:
-            # if len():
-                binrep += f"{0}"
-            else:
-                binrep += f"{1}"
-        return binrep
 
 
     def amplimer_table(self):
@@ -99,8 +101,8 @@ class Psearcher:
                     sub_df['template_name'] = hit[0]
                     fwd = hit[-2].split(' ')
                     rev = hit[-1].split(' ')
-                    sub_df['fwd_oligo'] = self._collapsed_iupac(fwd[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
-                    sub_df['rev_oligo'] = self._collapsed_iupac(rev[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
+                    sub_df['fwd_oligo'] = _collapsed_iupac(fwd[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
+                    sub_df['rev_oligo'] = _collapsed_iupac(rev[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
                     sub_df['fwd_mismatches'] = int(fwd[-2]) 
                     sub_df['rev_mismatches'] = int(rev[-2])
                     sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4]) - 1
@@ -112,8 +114,8 @@ class Psearcher:
                     sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']]).upper()
                     sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']]).upper()
                     sub_df['product'] = str(sub_df['fwd_oligo']+sub_df['amplicon_insert']+Seq(sub_df['rev_oligo'], alphabet=IUPAC.ambiguous_dna).reverse_complement())
-                    sub_df['fwd_match0mismatch1'] = self._iupac_zipper(sub_df['fwd_oligo'], sub_df['fwd_oligo_match'])
-                    sub_df['rev_match0mismatch1'] = self._iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
+                    sub_df['fwd_match0mismatch1'] = _iupac_zipper(sub_df['fwd_oligo'], sub_df['fwd_oligo_match'])
+                    sub_df['rev_match0mismatch1'] = _iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
                     df = pd.DataFrame(sub_df, index=[primerpair_name])
                     results_dfs_list.append(df)
         return pd.concat(results_dfs_list, ignore_index=True)
