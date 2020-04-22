@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 */*/*.bt2
-
+*.tsv
 # C extensions
 *.so
 
