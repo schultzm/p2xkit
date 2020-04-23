@@ -29,8 +29,9 @@ setup(
     packages=find_packages(exclude=["contrib", "docs", "tests"]),  # Required
     python_requires=">=3.7",
     include_package_data = True,
-    install_requires = ["biopython>=1.76",
-                         "pysam>=0.15.4"],
+    install_requires = ["biopython >= 1.76",
+                         "pysam >= 0.15.4",
+                         "pandas >= 1.0.3"],
     extras_require={  # Optional
         "dev": ["pre-commit", "pipenv"],
         "test": ["pytest", "pytest-cov"],
