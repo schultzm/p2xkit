@@ -2,9 +2,6 @@
 
 `ispcr` Uses Biopython, emboss, primersearch to align primers to template to find amplimers (in-silico PCR).
 `qpcr` does same as `ispcr` but adds qPCR probes to the mix (in-silico qPCR).
-To do:  
-
-- CI testing
 
 To use:  
 
@@ -22,3 +19,4 @@ Sub-commands help:
     test      Run p2xkit unittests
     version   Print version to stdout
 ```
+
