@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 */*/*.bt2
 *.tsv
+*.fasta
 # C extensions
 *.so
 
