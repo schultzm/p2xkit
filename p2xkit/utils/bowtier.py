@@ -9,6 +9,7 @@ from pathlib import Path, PurePath
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
+from Bio.Alphabet import IUPAC
 import pandas as pd
 from ..utils.psearcher import _iupac_zipper
 
@@ -28,9 +29,26 @@ class Bowtier:
         self.bowtieindex = list(self.templates.parent.glob(f"{self.templates.stem}.*.bt2"))
 
     def bowtieit(self, amplimer_table, probes):
-        pre_fasta = amplimer_table[['primer_pair', 'template_name', 'amplimer_n', 'amplicon_insert']]
-        for rown in pre_fasta.index.values:
-            subseq = SeqR
+        # pre_fasta = amplimer_table[['primer_pair', 'template_name', 'amplimer_n', 'amplicon_insert']]
+
+        for rown in amplimer_table.index.values:
+            if pd.notnull(amplimer_table.loc[rown, 'amplicon_insert']):
+                print(amplimer_table.loc[rown, 'amplicon_insert'])#:
+                # # print(type(pd.isnull(amplimer_table.loc[rown, 'amplicon_insert'])))
+                subseq = SeqRecord(amplimer_table.loc[rown, 'amplicon_insert'],
+                                id=amplimer_table.loc[rown, 'primer_pair'],
+                                name=amplimer_table.loc[rown, 'template_name'],
+                                description=f"Amplimer_{amplimer_table.loc[rown, 'amplimer_n']:.0f}")
+                print(subseq)
+                # print(SeqIO.write(subseq, sys.stderr, 'fasta'))
+            #  else:
+            #     print('y')
+                # subseq = SeqRecord(amplimer_table.loc[rown, 'amplicon_insert'],
+                #                 id=amplimer_table.loc[rown, 'primer_pair'],
+                #                 name=amplimer_table.loc[rown, 'template_name'],
+                #                 description=f"{amplimer_table.loc[rown, 'amplimer_n']}")
+                # # print(amplimer_table.loc[rown, 'amplicon_insert'])
+                # SeqIO.write(subseq, sys.stdout, 'fasta')
 
 
 
