@@ -93,7 +93,7 @@ class Psearcher:
                     hit = [i.strip() for i in hit]
                     #set primer_pari column
                     sub_df['primer_pair'] = primerpair_name
-                    sub_df['amplimer_n'] = index+1
+                    sub_df['amplimer_n'] = f"Amplimer_{index+1}"
                     sub_df['template_name'] = hit[0]
                     fwd = hit[-2].split(' ')
                     rev = hit[-1].split(' ')
