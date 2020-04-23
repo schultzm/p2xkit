@@ -1,0 +1,12 @@
+                    # Bowtie2 summary of options used
+                    # -L <int>           length of seed substrings; must be >3, <32 (22)
+                    # -c                 <m1>, <m2>, <r> are sequences themselves, not files
+                    # -U unpairedreads
+                    # -a/--all           report all alignments; very slow, MAPQ not meaningful # don't use this
+                    # -N <int>           max # mismatches in seed alignment; can be 0 or 1 (0)
+                    # --np <int>         penalty for non-A/C/G/Ts in read/ref (1)
+                    # -R <int>           for reads w/ repetitive seeds, try <int> sets of seeds (2)
+                    # -f                 query input files are (multi-)FASTA .fa/.mfa
+                    # --sam-no-qname-trunc Suppress standard behavior of truncating readname at first whitespace 
+                    #                      at the expense of generating non-standard SAM.
+                    # Here we map only the probe sequence as a string, not a file
