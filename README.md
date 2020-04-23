@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/schultzm/p2xkit.svg?style=svg&circle-token=6be92d4e84abcddc32721c2c507b07c08810e327)](https://app.circleci.com/pipelines/github/schultzm/p2xkit)
 
-`ispcr` Uses Biopython, emboss, primersearch to align primers to template to find amplimers (in-silico PCR).
+`ispcr` Uses Biopython, emboss, primersearch to align primers to template to find amplimers (in-silico PCR).  
 `qpcr` does same as `ispcr` but adds qPCR probes to the mix (in-silico qPCR).
 
 To use:  
