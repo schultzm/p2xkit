@@ -97,5 +97,10 @@ class Bowtier:
                 for i in indexed:
                     i.unlink() #remove all the index files
                 outhandle.unlink() # remove the subseq.fa
-        probes_mapped_table = pd.concat(total_df)#.to_csv(sep="\t"))
-        return probes_mapped_table
+            else:
+                total_df.append(self.amplimer_table.loc[[rown]])
+        if total_df:
+            probes_mapped_table = pd.concat(total_df)#.to_csv(sep="\t"))
+            return probes_mapped_table
+        else:
+            return pd.DataFrame({}, index=['NO HITS FOUND'])
