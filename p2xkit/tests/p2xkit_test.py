@@ -68,7 +68,7 @@ class BedTestCasePass(unittest.TestCase):
                     self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table()
-        indexed = Bowtier(amplimer_table, self.probes)
-        mapped = indexed.bowtieit()
+        qpcr_setup = Bowtier(amplimer_table, self.probes)
+        mapped = qpcr_setup.bowtieit()
         self.assertEqual(mapped.iloc[4,3], 'N_CN P')
         self.assertEqual(mapped.iloc[4,6], 'N_CN')
