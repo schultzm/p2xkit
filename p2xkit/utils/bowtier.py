@@ -85,9 +85,9 @@ class Bowtier:
                                 map_results_dfs.append(output_df)
                             else:
                                 sub_df = pd.DataFrame({}, index=[probe.id]) #probe.id is primer_pair
-                                to_join = self.amplimer_table.loc[(self.amplimer_table['primer_pair'] == records_subset['primer_pair']) & \
-                                                                  (self.amplimer_table['amplimer_n'] == records_subset['amplimer_n']) & \
-                                                                  (self.amplimer_table['template_name'] == records_subset['template_name'])]
+                                to_join = self.amplimer_table.loc[(self.amplimer_table['primer_pair'] == probe.id) & \
+                                                                  (self.amplimer_table['amplimer_n'] == amplimer_n) & \
+                                                                  (self.amplimer_table['template_name'] == subseq.description.split(' ')[-1])]
                                 to_join.set_index('primer_pair', inplace=True)
                                 to_join = to_join[[column for column in to_join.columns if column not in sub_df.columns]]
                                 output_df = pd.concat([sub_df, to_join], axis=1, join='inner')
