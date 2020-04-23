@@ -18,7 +18,7 @@ def indexit(infile):
     # Template bowtie2 index files generation
     template_bowtie2_idx_fnames = list(infile.parent.glob(f"{infile.stem}.*.bt2"))
     if len(template_bowtie2_idx_fnames) != 6:
-        cmd = f"bowtie2-build -q -f {infile} {PurePath(infile.parent, infile.stem)}"
+        cmd = f"bowtie2-build --threads 4 -q -f {infile} {PurePath(infile.parent, infile.stem)}"
         os.system(cmd)
     # return list(infile.parent.glob(f"{infile.stem}.*.bt2"))
 
@@ -31,20 +31,27 @@ class Bowtier:
         # this could all be done by creating a mini file of the amplimer and mapping to that. todo. 
         # instead of mapping to whole template
 
-    def bowtieit(self, amplimer_table, probes):
+    def bowtieit(self):
         # pre_fasta = amplimer_table[['primer_pair', 'template_name', 'amplimer_n', 'amplicon_insert']]
+        probes_dict = {}
+        with open(probes, 'r') as input_handle:
+            probes = list(SeqIO.parse(input_handle, 'fasta'))
+            for probe in probes:
+                # print(probe.description)
+                probes_dict[probe.description] = probe # Need to specify that probe names must be same as primer_pair with a space and then a probe identifier (e.g., 'RdRP_SARSr_DE P2')
 
-        for rown in amplimer_table.index.values:
-            if pd.notnull(amplimer_table.loc[rown, 'amplicon_insert']):
-                subseq = SeqRecord(Seq(amplimer_table.loc[rown, 'amplicon_insert'],
+        for rown in self.amplimer_table.index.values:
+            if pd.notnull(self.amplimer_table.loc[rown, 'amplicon_insert']):
+                subseq = SeqRecord(Seq(self.amplimer_table.loc[rown, 'amplicon_insert'],
                                        alphabet=IUPAC.ambiguous_dna),
-                                id=amplimer_table.loc[rown, 'primer_pair'],
-                                name=amplimer_table.loc[rown, 'template_name'],
-                                description=f"Amplimer_{amplimer_table.loc[rown, 'amplimer_n']:.0f}")
+                                id=self.amplimer_table.loc[rown, 'primer_pair'],
+                                name=self.amplimer_table.loc[rown, 'template_name'],
+                                description=f"Amplimer_{self.amplimer_table.loc[rown, 'amplimer_n']:.0f}")
                 outhandle = Path(f"{subseq.id}_{subseq.description}.fasta")
                 SeqIO.write(subseq, outhandle, 'fasta') #more thought needs to be put into this
-                indexit(outhandle)
-        #         map_results_dfs = [] 
+                indexit(outhandle) # need to clean this up at end
+
+                map_results_dfs = [] 
         # # Bowtie2 summary of options used
         # #     # -L <int>           length of seed substrings; must be >3, <32 (22)
         # #     # -c                 <m1>, <m2>, <r> are sequences themselves, not files
@@ -56,14 +63,8 @@ class Bowtier:
         # # #     # -f                 query input files are (multi-)FASTA .fa/.mfa
         # # --sam-no-qname-trunc Suppress standard behavior of truncating readname at first whitespace 
         # #               at the expense of generating non-standard SAM.
-        #         map_cmd = f"bowtie2 -x {PurePath(self.templates.parent, self.templates.stem)} -U {probes} -f --sam-no-qname-trunc --end-to-end  -L 7 -D 20"#q --np 0 -R 10"#, tqmanprobe.description) for tqmanprobe in probes_list]
+                map_cmd = f"bowtie2 -x {PurePath(outhandle.parent, outhandle.stem)} -U {probes} -f --sam-no-qname-trunc --end-to-end  -L 7 -D 20"#q --np 0 -R 10"#, tqmanprobe.description) for tqmanprobe in probes_list]
         # # print(map_cmd)
-        # probes_dict = {}
-        # with open(probes, 'r') as input_handle:
-        #     probes = list(SeqIO.parse(input_handle, 'fasta'))
-        #     for probe in probes:
-        #         # print(probe.description)
-        #         probes_dict[probe.description] = probe # Need to specify that probe names must be same as primer_pair with a space and then a probe identifier (e.g., 'RdRP_SARSr_DE P2')
         # # print(probes_dict)
         # templates_dict = {}
         # with open(self.templates, 'r') as input_handle:
