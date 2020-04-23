@@ -19,7 +19,6 @@ from pathlib import Path, PurePath, PosixPath
 from .. import (__parent_dir__,
                 __test_primers__,
                 __test_probes__,
-                __test_template__, #maybe redundant with templates in place
                 __test_templates__)
 import pkg_resources
 from ..utils.psearcher import Psearcher, _collapsed_iupac, _iupac_zipper #, Hit_parser
@@ -36,8 +35,6 @@ class BedTestCasePass(unittest.TestCase):
         self.probes   = Path(PurePath(pkg_resources.resource_filename(__parent_dir__,
                                                         __test_probes__)))
         self.mismatch = 20
-        # self.templates = pkg_resources.resource_filename(__parent_dir__,
-        #                                                  __test_templates__)
 
     def psearcher(self):
         reaction = Psearcher(self.templates, self.primers, self.mismatch)
@@ -48,10 +45,6 @@ class BedTestCasePass(unittest.TestCase):
 	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
 	CACATTGGCACCCGCAATC hits forward strand at 28706 with 0 mismatches
 	GAGGAACGAGAAGAGGCTTG hits reverse strand at [1071] with 0 mismatches""")
-        # for key, value in pcr_result.amplifiers.items():
-        #     for val in value:
-        #         pass
-                # print(val.hit_info)
 
     def iupaccheck(self):
         self.assertEqual("CARATGTTAAASACACTATTAGCATA",
@@ -67,7 +60,6 @@ class BedTestCasePass(unittest.TestCase):
                             self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table() # get the full table
-        # print(reaction.amplimer_tab.to_csv(sep="\t"))
         self.assertEqual(amplimer_table.iloc[4].loc['rev_match_mismatch'], "'========================")
 
     def bowtie_map(self):
@@ -76,20 +68,7 @@ class BedTestCasePass(unittest.TestCase):
                     self.mismatch)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table()
-
-        # print(amplimer_table.to_csv(sep="\t"))
         indexed = Bowtier(amplimer_table, self.probes)
-        # indexed.indexit()
         mapped = indexed.bowtieit()
-        # mapped.bowtieit(amplimer_table, self.probes)
-        
         self.assertEqual(mapped.iloc[4,3], 'N_CN P')
         self.assertEqual(mapped.iloc[4,6], 'N_CN')
-
-        # print(amplimer_table.to_csv(sep="\t"))
-        # print(mapped.to_csv(sep="\t"))
-        # need to match up the primerpair_name, template name, coordinates of probe hit, then add to new table
-        # or send all amplicons to file and index that for bowtie2.  
-        # for i in indexed.bowtieindex:
-        #     i.unlink() #remove all the index files
-

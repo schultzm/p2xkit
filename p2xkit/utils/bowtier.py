@@ -29,7 +29,6 @@ class Bowtier:
         self.amplimer_table = amplimer_table
 
     def bowtieit(self):
-        # print(self.amplimer_table)
         self.amplimer_table.set_index('primer_pair')
         probes_dict = defaultdict(list)
         total_df = []
@@ -54,17 +53,10 @@ class Bowtier:
                     with pysam.AlignmentFile(samfile, "r") as sam:
                         map_results_dfs = [] # this will store the dfs of mappings
                         for rec in sam.fetch(): # rec is a row in the SAM output
-                            # print(dir(rec))
                             if not rec.is_unmapped:
                                 records_subset = {'probe_template_start': rec.get_aligned_pairs()[0][1], # these indices are 0-based
                                                'probe_template_end'  : rec.get_aligned_pairs()[-1][1]} # 0-based
-                                # keys_to_keep = ['flag'] # SAM is **1-based, so ref_pos will be probe_template_start+1
-                                # records = rec.to_dict()
-                                # records_subset = {key: value for key, value in records.items() if key in keys_to_keep}
-                                # records_subset = {**probe_range, **records_subset}
                                 records_subset['probe_SAM_flag'] = rec.flag
-                                # records_subset['probe_amplicon_insert_pos'] = records_subset.pop()
-                                # records_subset['amplimer_template'] = f"{subseq.id} {subseq.description}"#.rename(columns={'ref_name': 'amplimer_template'})
                                 records_subset['probe_name'] = probe.description
                                 records_subset['probe_id'] = probe.description.split(' ')[-1] #e.g., "P", "P1" or "P2"; this is risky if space is not used to delimit probe ID
                                 records_subset['template_name'] = subseq.description.split(' ')[-1]
@@ -76,7 +68,7 @@ class Bowtier:
                                 records_subset['probe_globally_aligned'] = ''.join(['True' if records_subset['probe_length_aligned']==records_subset['probe_length'] else 'False'])
                                 records_subset['probe_orientation'] = 'FORWARD' # gets converted to reverse if samflag is 16, below
                                 records_subset['probe_match'] = subseq[records_subset['probe_template_start']:records_subset['probe_template_end']+1].seq #+1 as this is a slice index; this a Seq object
-                                if rec.flag == 16: # REVERSED, do some revcomp and flagging
+                                if rec.is_reverse: # REVERSED, do some revcomp and flagging
                                     records_subset['probe_orientation'] = 'REVERSE'
                                     records_subset['probe_match'] = str(records_subset['probe_match'].reverse_complement()).upper()
                                 else: # convert match to string
@@ -91,7 +83,6 @@ class Bowtier:
                                 to_join = to_join[[column for column in to_join.columns if column not in sub_df.columns]]
                                 output_df = pd.concat([sub_df, to_join], axis=1, join='inner')
                                 map_results_dfs.append(output_df)
-                                # print(output_df.to_csv(sep="\t"))
                             else:
                                 sub_df = pd.DataFrame({}, index=[probe.id]) #probe.id is primer_pair
                                 to_join = self.amplimer_table.loc[(self.amplimer_table['primer_pair'] == records_subset['primer_pair']) & \
@@ -101,9 +92,7 @@ class Bowtier:
                                 to_join = to_join[[column for column in to_join.columns if column not in sub_df.columns]]
                                 output_df = pd.concat([sub_df, to_join], axis=1, join='inner')
                                 map_results_dfs.append(output_df)
-                                # print(output_df.to_csv(sep="\t"))
                         df = pd.concat(map_results_dfs)
-                        # print(df.to_csv(sep="\t"))
                         total_df.append(df)
                 for i in indexed:
                     i.unlink() #remove all the index files
