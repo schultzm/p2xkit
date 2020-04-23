@@ -33,13 +33,15 @@ class Bowtier:
 
         for rown in amplimer_table.index.values:
             if pd.notnull(amplimer_table.loc[rown, 'amplicon_insert']):
-                print(amplimer_table.loc[rown, 'amplicon_insert'])#:
+                # print(amplimer_table.loc[rown, 'amplicon_insert'])#:
                 # # print(type(pd.isnull(amplimer_table.loc[rown, 'amplicon_insert'])))
-                subseq = SeqRecord(amplimer_table.loc[rown, 'amplicon_insert'],
+                # print(type(amplimer_table.loc[rown, 'amplicon_insert']))
+                subseq = SeqRecord(Seq(amplimer_table.loc[rown, 'amplicon_insert'],
+                                       alphabet=IUPAC.ambiguous_dna),
                                 id=amplimer_table.loc[rown, 'primer_pair'],
                                 name=amplimer_table.loc[rown, 'template_name'],
                                 description=f"Amplimer_{amplimer_table.loc[rown, 'amplimer_n']:.0f}")
-                print(subseq)
+                print(subseq.format('fasta'))
                 # print(SeqIO.write(subseq, sys.stderr, 'fasta'))
             #  else:
             #     print('y')
