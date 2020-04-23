@@ -96,8 +96,8 @@ class BedTestCasePass(unittest.TestCase):
         mapped = indexed.bowtieit()
         # mapped.bowtieit(amplimer_table, self.probes)
         
-        # self.assertEqual(mapped.iloc[4,6], 28)
-        # self.assertEqual(mapped.iloc[4,6], 28)
+        self.assertEqual(mapped.iloc[4,3], 'N_CN P')
+        self.assertEqual(mapped.iloc[4,6], 'N_CN')
 
         # print(amplimer_table.to_csv(sep="\t"))
         # print(mapped.to_csv(sep="\t"))

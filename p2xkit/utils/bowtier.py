@@ -108,4 +108,5 @@ class Bowtier:
                 for i in indexed:
                     i.unlink() #remove all the index files
                 outhandle.unlink() # remove the subseq.fa
-        print(pd.concat(total_df).to_csv(sep="\t"))
+        probes_mapped_table = pd.concat(total_df)#.to_csv(sep="\t"))
+        return probes_mapped_table
