@@ -3,9 +3,9 @@
 p2xkit init.py
 """
 
-__version__         = "0.0.4"
+__version__         = "0.0.5"
 __parent_dir__      = "p2xkit"
-__test_primers__    = "data/primers.tab"
+__test_primers__    = "data/primers.tsv"
 __test_probes__     = "data/probes.fa"
 __test_templates__  = "data/templates.fa"
 __description__     = "Locate primers and map probes to amplicons"
