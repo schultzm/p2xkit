@@ -37,7 +37,8 @@ class BedTestCasePass(unittest.TestCase):
         self.mismatch = 20
 
     def psearcher(self):
-        reaction = Psearcher(self.templates, self.primers, self.mismatch)
+        reaction = Psearcher(self.templates, self.primers, self.mismatch,
+                             False, 0, 50000, 60000)
         reaction.psearchit()
         self.assertEqual(reaction.pcr_results.amplifiers['N_Sarbeco_DE'][0]. \
                          hit_info,
@@ -57,15 +58,23 @@ class BedTestCasePass(unittest.TestCase):
     def amplifiers_parsed(self):
         reaction = Psearcher(self.templates,
                             self.primers,
-                            self.mismatch)
+                            self.mismatch,
+                            False,
+                            0,
+                            50000,
+                            60000)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table() # get the full table
         self.assertEqual(amplimer_table.iloc[4].loc['rev_match_mismatch'], "'========================")
 
     def bowtie_map(self):
         reaction = Psearcher(self.templates,
-                    self.primers,
-                    self.mismatch)
+                             self.primers,
+                             self.mismatch,
+                             False,
+                             0,
+                             50000,
+                             60000)
         reaction.psearchit() # get PrimerSearch.OutputRecords
         amplimer_table = reaction.amplimer_table()
         qpcr_setup = Bowtier(amplimer_table, self.probes)

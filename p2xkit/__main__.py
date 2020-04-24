@@ -55,12 +55,12 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     args = parser.parse_args()
 
-    if args.end is None: # If args.end not set, then make it slightly longer than the longest contig
-        with open(args.template, 'r') as input_handle:
-            args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
     if not args.subparser_name:
         parser.print_help()
     elif args.subparser_name == "ispcr":
+        if args.end is None: # i.e., if args.end not set, then make it slightly longer than the longest contig
+            with open(args.template, 'r') as input_handle:
+                args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
         from .utils.psearcher import Psearcher
         reaction = Psearcher(args.template,
                              args.primers,
@@ -72,6 +72,9 @@ def main():
         reaction.psearchit()
         print(reaction.amplimer_table().to_csv(sep="\t"))
     elif args.subparser_name == "qpcr":
+        if args.end is None: # i.e., if args.end not set, then make it slightly longer than the longest contig
+            with open(args.template, 'r') as input_handle:
+                args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
         from .utils.psearcher import Psearcher
         from .utils.bowtier import Bowtier
         reaction = Psearcher(args.template,
@@ -88,7 +91,7 @@ def main():
             print(qpcr_setup.bowtieit().to_csv(sep="\t"))
         else:
             import sys
-            print('No PCR hits found.', file=sys.stderr)
+            print('No PCR hits found.\n', file=sys.stderr)
     elif args.subparser_name == "version":
         print(p2xkit.__version__)
     elif args.subparser_name == "test":
