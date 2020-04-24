@@ -93,21 +93,15 @@ class Psearcher:
         '''
         results_dfs_list = []
         for primerpair_name, amplifier in self.pcr_results.amplifiers.items():
-            # if not amplifier: # i.e., if list is empty
-            #     df = pd.DataFrame({'primer_pair': primerpair_name, 'amplicon_insert': None}, index=[primerpair_name])
-            #     results_dfs_list.append(df)
             if amplifier:
                 for index, amplimer in enumerate(amplifier): # need the indices
                     hit = amplimer.hit_info.replace('\t', '').strip(' ').split('\n')
                     if self.upper_limit is not None and amplimer.length > self.upper_limit:
                         print(f"Amplimer_{index+1}, primers {primerpair_name}, for {hit[0]} is {amplimer.length} bp. Hit discarded due to exceeding {self.upper_limit} bp.", file=sys.stderr)
-                        # df = pd.DataFrame({'primer_pair': primerpair_name, 'amplicon_insert': None}, index=[primerpair_name])
-                        # results_dfs_list.append(df)
                     else:
                         sub_df = {}
                         
                         hit = [i.strip() for i in hit]
-                        #set primer_pari column
                         sub_df['primer_pair'] = primerpair_name
                         sub_df['amplimer_n'] = f"Amplimer_{index+1}"
                         sub_df['template_name'] = hit[0]
@@ -136,4 +130,3 @@ class Psearcher:
             return results
         else:
             return None
-# TODO convert float columns to integers
