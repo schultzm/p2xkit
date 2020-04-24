@@ -17,6 +17,12 @@ def main():
     subparser1_args.add_argument('-m', "--mismatch", help = """Percent mismatch
                                  identity tolerance""",
                                  type=int, default=20, required=False)
+    subparser1_args.add_argument('-r', '--reverse_complement', help='''Search
+                                 on the reverse complement of the template
+                                 strand.''',
+                                 default=False,
+                                 action='store_true',
+                                 required=False)
     subparser2_args = argparse.ArgumentParser(add_help=False)
     subparser2_args.add_argument("probes", help = "Fasta formatted qPCR probes file.",)
     subparser_modules = parser.add_subparsers(
@@ -45,13 +51,15 @@ def main():
         parser.print_help()
     elif args.subparser_name == "ispcr":
         from .utils.psearcher import Psearcher
-        reaction = Psearcher(args.template, args.primers, args.mismatch)
+        reaction = Psearcher(args.template, args.primers, args.mismatch,
+                             args.reverse_complement)
         reaction.psearchit()
         print(reaction.amplimer_table().to_csv(sep="\t"))
     elif args.subparser_name == "qpcr":
         from .utils.psearcher import Psearcher
         from .utils.bowtier import Bowtier
-        reaction = Psearcher(args.template, args.primers, args.mismatch)
+        reaction = Psearcher(args.template, args.primers, args.mismatch,
+                             args.reverse_complement)
         reaction.psearchit()
         amplimer_table = reaction.amplimer_table()
         qpcr_setup = Bowtier(amplimer_table, args.probes)

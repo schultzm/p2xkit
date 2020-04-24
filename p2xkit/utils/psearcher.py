@@ -9,6 +9,7 @@ from Bio.Data.IUPACData import ambiguous_dna_values
 from io import StringIO
 import sys
 import Bio
+# from Bio.Application import _Option #allows me to append options to the primersearchcl
 
 # Moved next two functions to module scope
 def _collapsed_iupac(primerstring):
@@ -47,26 +48,34 @@ def _iupac_zipper(seq1, seq2):
 
 
 class Psearcher:
-    def __init__(self, template, primers, mismatch):
+    def __init__(self, template, primers, mismatch, reverse_complement):
         self.template = template
         self.template_seqs = {seq.id: seq for seq in list(SeqIO.parse(open(self.template, 'r'), 'fasta'))}
+        self.reverse_complement = reverse_complement
+        if self.reverse_complement:
+            self.template_seqs = {seq.id: seq.reverse_complement() for seq in list(SeqIO.parse(open(self.template, 'r'), 'fasta'))}
         self.primers = primers
         self.mismatch = mismatch
-        # print(self.template_seqs)
 
-    def psearchit(self):
+    def psearchit(self, seqall_options="-sbegin1=2000000 -send1=10000000"):
         """
         run primersearch
         return a dictionary of {key(primer pair name [str]):
                                 value ([list] of amplifiers)}
         """
+        # -sbegin1            integer    Start of each sequence to be used
+        # -send1
+        sreverse = '-sreverse1=N'
+        if self.reverse_complement:
+            sreverse = '-sreverse1=Y'
+
         psearchcl = PrimerSearchCommandline()
-        psearchcl.seqall = f"{self.template} -snucleotide1"
+        psearchcl.seqall = f"{self.template} -snucleotide1 {seqall_options} {sreverse}" 
         psearchcl.infile = self.primers
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
+        print(psearchcl, file=sys.stderr)
         stdout, stderr = psearchcl()
-        # print(stdout)
         self.pcr_results = psearch.read(StringIO(stdout))
 
 
@@ -117,13 +126,5 @@ class Psearcher:
                     results_dfs_list.append(df)
         results = pd.concat(results_dfs_list, ignore_index=True)
         return results
-        # results['primer_pair'] = pd.Series(results.index.values).apply(lambda x: f"{x}")
-        # print(results.primer_pair)
-        # print(results)
-        # results.reset_index()
-        # results.index = range(0, len(results.index))
-        # results.index = range()
-        # print(results.to_csv(sep="\t"))
-        # return results
 
 # TODO convert float columns to integers
