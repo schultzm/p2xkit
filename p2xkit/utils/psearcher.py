@@ -75,7 +75,7 @@ class Psearcher:
         psearchcl.infile = self.primers
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
-        # print(psearchcl, file=sys.stderr)
+        print(psearchcl, file=sys.stderr)
         stdout, stderr = psearchcl()
         self.pcr_results = psearch.read(StringIO(stdout))
 
@@ -95,7 +95,8 @@ class Psearcher:
         for primerpair_name, amplifier in self.pcr_results.amplifiers.items():
             if amplifier:
                 for index, amplimer in enumerate(amplifier): # need the indices
-                    hit = amplimer.hit_info.replace('\t', '').strip(' ').split('\n')
+                    hit = amplimer.hit_info.replace('\t', '').rstrip(' ').split('\n')
+                    # print(hit)
                     if self.upper_limit is not None and amplimer.length > self.upper_limit:
                         print(f"Amplimer_{index+1}, primers {primerpair_name}, for {hit[0].rstrip()} is {amplimer.length}bp: discarded as > user-specified {self.upper_limit}bp limit.", file=sys.stderr)
                     else:
@@ -113,6 +114,7 @@ class Psearcher:
                         sub_df['rev_mismatches'] = int(rev[-2])
                         sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4]) - 1
                         sub_df['fwd_oligo_tmplt_end']   = sub_df['fwd_oligo_tmplt_start'] + len(sub_df['fwd_oligo'])
+                        # print(len(self.template_seqs[hit[0]].seq))
                         sub_df['rev_oligo_tmplt_end']   = len(self.template_seqs[hit[0]].seq) - int(rev[-4].replace('[', '').replace(']', '')) + 1
                         sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo'])
                         sub_df['amplicon_insert'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_end']:sub_df['rev_oligo_tmplt_start']].upper())
