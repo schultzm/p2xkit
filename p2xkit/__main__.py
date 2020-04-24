@@ -23,6 +23,13 @@ def main():
                                  default=False,
                                  action='store_true',
                                  required=False)
+    subparser1_args.add_argument('-b', "--begin", help = """Begin the search
+                                 on the template strand at this position.""",
+                                 type=int, default=0, required=False)
+    subparser1_args.add_argument('-e', '--end', help = """End the search on the 
+                                 on the template strand at this position.""",
+                                 type=int, default=1000000000, required=False)
+    
     subparser2_args = argparse.ArgumentParser(add_help=False)
     subparser2_args.add_argument("probes", help = "Fasta formatted qPCR probes file.",)
     subparser_modules = parser.add_subparsers(
@@ -51,15 +58,23 @@ def main():
         parser.print_help()
     elif args.subparser_name == "ispcr":
         from .utils.psearcher import Psearcher
-        reaction = Psearcher(args.template, args.primers, args.mismatch,
-                             args.reverse_complement)
+        reaction = Psearcher(args.template,
+                             args.primers,
+                             args.mismatch,
+                             args.reverse_complement,
+                             args.begin,
+                             args.end)
         reaction.psearchit()
         print(reaction.amplimer_table().to_csv(sep="\t"))
     elif args.subparser_name == "qpcr":
         from .utils.psearcher import Psearcher
         from .utils.bowtier import Bowtier
-        reaction = Psearcher(args.template, args.primers, args.mismatch,
-                             args.reverse_complement)
+        reaction = Psearcher(args.template,
+                             args.primers,
+                             args.mismatch,
+                             args.reverse_complement,
+                             args.begin,
+                             args.end)
         reaction.psearchit()
         amplimer_table = reaction.amplimer_table()
         qpcr_setup = Bowtier(amplimer_table, args.probes)

@@ -48,7 +48,7 @@ def _iupac_zipper(seq1, seq2):
 
 
 class Psearcher:
-    def __init__(self, template, primers, mismatch, reverse_complement):
+    def __init__(self, template, primers, mismatch, reverse_complement, begin, end):
         self.template = template
         self.template_seqs = {seq.id: seq for seq in list(SeqIO.parse(open(self.template, 'r'), 'fasta'))}
         self.reverse_complement = reverse_complement
@@ -56,8 +56,10 @@ class Psearcher:
             self.template_seqs = {seq.id: seq.reverse_complement() for seq in list(SeqIO.parse(open(self.template, 'r'), 'fasta'))}
         self.primers = primers
         self.mismatch = mismatch
+        self.begin = begin
+        self.end = end
 
-    def psearchit(self, seqall_options="-sbegin1=2000000 -send1=10000000"):
+    def psearchit(self):
         """
         run primersearch
         return a dictionary of {key(primer pair name [str]):
@@ -70,7 +72,7 @@ class Psearcher:
             sreverse = '-sreverse1=Y'
 
         psearchcl = PrimerSearchCommandline()
-        psearchcl.seqall = f"{self.template} -snucleotide1 {seqall_options} {sreverse}" 
+        psearchcl.seqall = f"{self.template} -snucleotide1 -sbegin1={self.begin} -send1={self.end} {sreverse}" 
         psearchcl.infile = self.primers
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
