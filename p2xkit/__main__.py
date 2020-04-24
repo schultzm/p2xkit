@@ -5,12 +5,11 @@ def main():
     """Perform the main routine."""
     import argparse
     from pathlib import Path, PurePath
-    import p2xkit
+    from Bio import SeqIO
 
     parser = argparse.ArgumentParser(
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-            description="""
-                        """)
+             formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+             description="""In silico PCR and qPCR""")
     subparser1_args = argparse.ArgumentParser(add_help=False)
     subparser1_args.add_argument("template", help = "Template fasta.")
     subparser1_args.add_argument("primers", help = "primersearch formatted tab-delimited primer file")
@@ -28,8 +27,10 @@ def main():
                                  type=int, default=0, required=False)
     subparser1_args.add_argument('-e', '--end', help = """End the search on the 
                                  on the template strand at this position.""",
-                                 type=int, default=1000000000, required=False)
-    
+                                 type=int, default=None, required=False)
+    subparser1_args.add_argument('-u', '--upper_limit', help = """Specify 
+                                 upper limit of PCR amplicon size""",
+                                 type=int, default=None, required=False)
     subparser2_args = argparse.ArgumentParser(add_help=False)
     subparser2_args.add_argument("probes", help = "Fasta formatted qPCR probes file.",)
     subparser_modules = parser.add_subparsers(
@@ -54,6 +55,9 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     args = parser.parse_args()
 
+    if args.end is None: # If args.end not set, then make it slightly longer than the longest contig
+        with open(args.template, 'r') as input_handle:
+            args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
     if not args.subparser_name:
         parser.print_help()
     elif args.subparser_name == "ispcr":
@@ -63,7 +67,8 @@ def main():
                              args.mismatch,
                              args.reverse_complement,
                              args.begin,
-                             args.end)
+                             args.end,
+                             args.upper_limit)
         reaction.psearchit()
         print(reaction.amplimer_table().to_csv(sep="\t"))
     elif args.subparser_name == "qpcr":
@@ -74,11 +79,16 @@ def main():
                              args.mismatch,
                              args.reverse_complement,
                              args.begin,
-                             args.end)
+                             args.end,
+                             args.upper_limit)
         reaction.psearchit()
         amplimer_table = reaction.amplimer_table()
-        qpcr_setup = Bowtier(amplimer_table, args.probes)
-        print(qpcr_setup.bowtieit().to_csv(sep="\t"))
+        if amplimer_table is not None:
+            qpcr_setup = Bowtier(amplimer_table, args.probes)
+            print(qpcr_setup.bowtieit().to_csv(sep="\t"))
+        else:
+            import sys
+            print('No PCR hits found.', file=sys.stderr)
     elif args.subparser_name == "version":
         print(p2xkit.__version__)
     elif args.subparser_name == "test":
