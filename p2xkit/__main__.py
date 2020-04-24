@@ -5,7 +5,7 @@ def main():
     """Perform the main routine."""
     import argparse
     from pathlib import Path, PurePath
-    from Bio import SeqIO
+    import sys
 
     parser = argparse.ArgumentParser(
              formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -59,8 +59,11 @@ def main():
         parser.print_help()
     elif args.subparser_name == "ispcr":
         if args.end is None: # i.e., if args.end not set, then make it slightly longer than the longest contig
+            from Bio import SeqIO
             with open(args.template, 'r') as input_handle:
                 args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
+                print(f"Set args.end to {args.end} as user entered 'None'",
+                      file=sys.stderr)
         from .utils.psearcher import Psearcher
         reaction = Psearcher(args.template,
                              args.primers,
@@ -72,6 +75,7 @@ def main():
         reaction.psearchit()
         print(reaction.amplimer_table().to_csv(sep="\t"))
     elif args.subparser_name == "qpcr":
+        from Bio import SeqIO
         if args.end is None: # i.e., if args.end not set, then make it slightly longer than the longest contig
             with open(args.template, 'r') as input_handle:
                 args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
@@ -90,7 +94,6 @@ def main():
             qpcr_setup = Bowtier(amplimer_table, args.probes)
             print(qpcr_setup.bowtieit().to_csv(sep="\t"))
         else:
-            import sys
             print('No PCR hits found.\n', file=sys.stderr)
     elif args.subparser_name == "version":
         print(p2xkit.__version__)

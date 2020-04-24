@@ -75,7 +75,7 @@ class Psearcher:
         psearchcl.infile = self.primers
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
-        print(psearchcl, file=sys.stderr)
+        # print(psearchcl, file=sys.stderr)
         stdout, stderr = psearchcl()
         self.pcr_results = psearch.read(StringIO(stdout))
 
@@ -97,7 +97,7 @@ class Psearcher:
                 for index, amplimer in enumerate(amplifier): # need the indices
                     hit = amplimer.hit_info.replace('\t', '').strip(' ').split('\n')
                     if self.upper_limit is not None and amplimer.length > self.upper_limit:
-                        print(f"Amplimer_{index+1}, primers {primerpair_name}, for {hit[0]} is {amplimer.length} bp. Hit discarded due to exceeding {self.upper_limit} bp.", file=sys.stderr)
+                        print(f"Amplimer_{index+1}, primers {primerpair_name}, for {hit[0].rstrip()} is {amplimer.length}bp: discarded as > user-specified {self.upper_limit}bp limit.", file=sys.stderr)
                     else:
                         sub_df = {}
                         
