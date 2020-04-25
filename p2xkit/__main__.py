@@ -29,8 +29,8 @@ def main():
                                  on the template strand at this position.""",
                                  type=int, default=None, required=False)
     subparser1_args.add_argument('-u', '--upper_limit', help = """Specify 
-                                 upper limit of PCR amplicon size""",
-                                 type=int, default=None, required=False)
+                                 upper limit of PCR amplicon size.""",
+                                 type=int, default=100000, required=False)
     subparser2_args = argparse.ArgumentParser(add_help=False)
     subparser2_args.add_argument("probes", help = "Fasta formatted qPCR probes file.",)
     subparser_modules = parser.add_subparsers(
@@ -79,6 +79,8 @@ def main():
         if args.end is None: # i.e., if args.end not set, then make it the sum of the length of all the contigs
             with open(args.template, 'r') as input_handle:
                 args.end = sum([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))])# + 1
+                print(f"Set args.end to {args.end} as user entered 'None'",
+                      file=sys.stderr)
                 # if args.end > 5000001:
                 #     print(f"Your max contig size is > 5000000.  You will probably run into out of memory errors.")
         from .utils.psearcher import Psearcher
@@ -93,7 +95,10 @@ def main():
         reaction.psearchit()
         amplimer_table = reaction.amplimer_table()
         if amplimer_table is not None:
-            qpcr_setup = Bowtier(amplimer_table, args.probes)
+            qpcr_setup = Bowtier(amplimer_table,
+                                 args.template,
+                                 args.probes,
+                                 args.reverse_complement)
             print(qpcr_setup.bowtieit().to_csv(sep="\t"))
         else:
             print('No PCR hits found.\n', file=sys.stderr)
