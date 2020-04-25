@@ -22,5 +22,5 @@ Sub-commands help:
     version   Print version to stdout
 ```
 
-DO NOT USE
+
 Under development
