@@ -11,7 +11,9 @@ def main():
              formatter_class=argparse.ArgumentDefaultsHelpFormatter,
              description="""In silico PCR and qPCR""")
     subparser1_args = argparse.ArgumentParser(add_help=False)
-    subparser1_args.add_argument("template", help = "Template fasta.")
+    subparser1_args.add_argument("template", help = """Template fasta.
+                                 ProTip: Ensure no '|', '/' or ' ' characters
+                                 in fasta headers.""")
     subparser1_args.add_argument("primers", help = "primersearch formatted tab-delimited primer file")
     subparser1_args.add_argument('-m', "--mismatch", help = """Percent mismatch
                                  identity tolerance""",

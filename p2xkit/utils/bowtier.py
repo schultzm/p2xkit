@@ -108,4 +108,4 @@ class Bowtier:
             probes_mapped_table = pd.concat(total_df)#.to_csv(sep="\t"))
             return probes_mapped_table
         else:
-            return pd.DataFrame({}, index=['NO HITS FOUND'])
+            return pd.DataFrame({}, index=['NO qPCR HITS FOUND.  Run programname ispcr cmds instead to check for stage 1 PCR hits']) # TODO: update this
