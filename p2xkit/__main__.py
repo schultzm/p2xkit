@@ -96,7 +96,8 @@ def main():
         else:
             print('No PCR hits found.\n', file=sys.stderr)
     elif args.subparser_name == "version":
-        print(p2xkit.__version__)
+        from . import __version__
+        print(__version__)
     elif args.subparser_name == "test":
         import unittest
         from .tests.test_suite import suite
