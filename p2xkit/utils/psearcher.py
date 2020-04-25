@@ -9,7 +9,6 @@ from Bio.Data.IUPACData import ambiguous_dna_values
 from io import StringIO
 import sys
 import Bio
-# from Bio.Application import _Option #allows me to append options to the primersearchcl
 
 # Moved next two functions to module scope
 def _collapsed_iupac(primerstring):
@@ -32,8 +31,6 @@ def _collapsed_iupac(primerstring):
     return collapsed
 
 def _iupac_zipper(seq1, seq2):
-    # print('seq1', seq1)
-    # print('seq2', seq2)
     zipped = list(zip([i for i in seq1.upper()], [i for i in seq2.upper()]))
     binrep = ''
     for i in zipped:
@@ -75,13 +72,9 @@ class Psearcher:
         psearchcl.infile = self.primers
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
-        # psearchcl.outfile = "primersearch.tmp"
         print(psearchcl, file=sys.stderr)
-        # psearchcl()
         stdout, stderr = psearchcl()
         self.pcr_results = psearch.read(StringIO(stdout))
-        # with open("primersearch.tmp", "r") as input_handle:
-            # self.pcr_results = psearch.read(input_handle)
 
 
     def amplimer_table(self):
@@ -100,33 +93,27 @@ class Psearcher:
             if amplifier:
                 for index, amplimer in enumerate(amplifier): # need the indices
                     hit = amplimer.hit_info.replace('\t', '').rstrip(' ').split('\n')
-                    # print(hit)
                     if self.upper_limit is not None and amplimer.length > self.upper_limit:
                         print(f"Amplimer_{index+1}, primers {primerpair_name}, for {hit[0].rstrip()} is {amplimer.length}bp: discarded as > user-specified {self.upper_limit}bp limit.", file=sys.stderr)
                     else:
                         sub_df = {}
-                        
                         hit = [i.strip() for i in hit]
                         sub_df['primer_pair'] = primerpair_name
                         sub_df['amplimer_n'] = f"Amplimer_{index+1}"
                         sub_df['template_name'] = hit[0]
                         fwd = hit[-2].split(' ')
                         rev = hit[-1].split(' ')
-                        sub_df['fwd_oligo'] = _collapsed_iupac(fwd[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
-                        sub_df['rev_oligo'] = _collapsed_iupac(rev[0]).upper()#, alphabet = IUPAC.ambiguous_dna)
+                        sub_df['fwd_oligo'] = _collapsed_iupac(fwd[0]).upper()
+                        sub_df['rev_oligo'] = _collapsed_iupac(rev[0]).upper()
                         sub_df['fwd_mismatches'] = int(fwd[-2]) 
                         sub_df['rev_mismatches'] = int(rev[-2])
                         sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4]) - 1
                         sub_df['fwd_oligo_tmplt_end']   = sub_df['fwd_oligo_tmplt_start'] + len(sub_df['fwd_oligo'])
-                        # print(len(self.template_seqs[hit[0]].seq))
                         sub_df['rev_oligo_tmplt_end']   = len(self.template_seqs[hit[0]].seq) - int(rev[-4].replace('[', '').replace(']', '')) + 1
                         sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo'])
-                        # sub_df['amplicon_insert'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_end']:sub_df['rev_oligo_tmplt_start']].upper())
-                        # sub_df['amplicon_full'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']].upper())
                         sub_df['amplicon_length'] = amplimer.length
                         sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']]).upper()
                         sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']]).upper()
-                        # sub_df['product'] = str(sub_df['fwd_oligo']+sub_df['amplicon_insert']+Seq(sub_df['rev_oligo'], alphabet=IUPAC.ambiguous_dna).reverse_complement())
                         sub_df['fwd_match_mismatch'] = _iupac_zipper(sub_df['fwd_oligo'], sub_df['fwd_oligo_match'])
                         sub_df['rev_match_mismatch'] = _iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
                         df = pd.DataFrame(sub_df, index=[primerpair_name])

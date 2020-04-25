@@ -43,13 +43,10 @@ class Bowtier:
             for probe in probes:
                 probes_dict[probe.id].append(probe) # Need to specify in readme that probe names must be same as primer_pair with a space and then a probe identifier (e.g., 'RdRP_SARSr_DE P2')
         for rown in self.amplimer_table.index.values: #iterate through all the amplimers and map probes
-        # if pd.notnull(self.amplimer_table.loc[rown, 'amplicon_insert']):
             amplimer_n = f"{self.amplimer_table.loc[rown, 'amplimer_n']}"
             amplicon_insert = self.template_seqs[self.amplimer_table.loc[rown, 'template_name']]. \
-                                                 seq[self.amplimer_table.loc[rown, 'fwd_oligo_tmplt_end']: \
-                                                     self.amplimer_table.loc[rown, 'rev_oligo_tmplt_start']]. \
-                              upper()#next line slice it
-            # print('amplicon_insert', amplicon_insert)
+                              seq[self.amplimer_table.loc[rown, 'fwd_oligo_tmplt_end']: \
+                                  self.amplimer_table.loc[rown, 'rev_oligo_tmplt_start']].upper()
             subseq = SeqRecord(amplicon_insert,
                               id=self.amplimer_table.loc[rown, 'primer_pair'],
                               description=f"{amplimer_n} from {self.amplimer_table.loc[rown, 'template_name']}")
@@ -107,8 +104,6 @@ class Bowtier:
             for i in indexed:
                 i.unlink() #remove all the index files
             outhandle.unlink() # remove the subseq.fa
-            # else:
-                # total_df.append(self.amplimer_table.loc[[rown]])
         if total_df:
             probes_mapped_table = pd.concat(total_df)#.to_csv(sep="\t"))
             return probes_mapped_table
