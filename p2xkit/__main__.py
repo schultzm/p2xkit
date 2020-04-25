@@ -16,9 +16,9 @@ def main():
     subparser1_args.add_argument('-m', "--mismatch", help = """Percent mismatch
                                  identity tolerance""",
                                  type=int, default=20, required=False)
-    subparser1_args.add_argument('-r', '--reverse_complement', help='''Search
-                                 on the reverse complement of the template
-                                 strand.''',
+    subparser1_args.add_argument('-r', '--reverse_complement', help='''Switch on
+                                 searching on the reverse complement of the
+                                 template strand.''',
                                  default=False,
                                  action='store_true',
                                  required=False)
@@ -26,7 +26,9 @@ def main():
                                  on the template strand at this position.""",
                                  type=int, default=0, required=False)
     subparser1_args.add_argument('-e', '--end', help = """End the search on the 
-                                 on the template strand at this position.""",
+                                 on the template strand at this position.
+                                 Defaults at runtime to the total length of
+                                 contigs in the input file.""",
                                  type=int, default=None, required=False)
     subparser1_args.add_argument('-u', '--upper_limit', help = """Specify 
                                  upper limit of PCR amplicon size.""",
