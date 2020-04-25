@@ -79,8 +79,8 @@ def main():
         if args.end is None: # i.e., if args.end not set, then make it slightly longer than the longest contig
             with open(args.template, 'r') as input_handle:
                 args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
-                if args.end > 5000001:
-                    print(f"Your max contig size is > 5000000.  You will probably run into out of memory errors.")
+                # if args.end > 5000001:
+                #     print(f"Your max contig size is > 5000000.  You will probably run into out of memory errors.")
         from .utils.psearcher import Psearcher
         from .utils.bowtier import Bowtier
         reaction = Psearcher(args.template,
