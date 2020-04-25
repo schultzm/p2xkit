@@ -1,0 +1,114 @@
+
+Primer name RdRP_SARSr_DE
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	GTGA[GAR]ATGGTCATGTGTGGCGG hits forward strand at 15431 with 0 mismatches
+	CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA hits reverse strand at [14374] with 1 mismatches
+	Amplimer length: 100 bp
+
+Primer name E_Sarbeco_DE
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	ACAGGTACGTTAATAGTTAATAGCGT hits forward strand at 26269 with 0 mismatches
+	ATATTGCAGCAGTACGCACACA hits reverse strand at [3523] with 0 mismatches
+	Amplimer length: 113 bp
+
+Primer name ORF1ab_CN
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	CCCTGTGGGTTTTACACTTAA hits forward strand at 13342 with 0 mismatches
+	ACGATTGTGCATCAGCTGA hits reverse strand at [16444] with 0 mismatches
+	Amplimer length: 119 bp
+
+Primer name N_CN
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	GGGGAACTTCTCCTGCTAGAAT hits forward strand at 28881 with 0 mismatches
+	CAGACATTTTGCTCTCAAGCTG hits reverse strand at [925] with 0 mismatches
+	Amplimer length: 99 bp
+
+Primer name 2019-nCoV_N1_US
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	GACCCCAAAATCAGCGAAAT hits forward strand at 28287 with 0 mismatches
+	TCTGGTTACTGCCAGTTGAATCTG hits reverse strand at [1546] with 0 mismatches
+	Amplimer length: 72 bp
+
+Primer name 2019-nCoV_N2_US
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	TTACAAACATTGGCCGCAAA hits forward strand at 29164 with 0 mismatches
+	GCGCGACATTCCGAAGAA hits reverse strand at [674] with 0 mismatches
+	Amplimer length: 67 bp
+
+Primer name 2019-nCoV_N3_US
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	GGGAGCCTTGAATACACCAAAA hits forward strand at 28681 with 0 mismatches
+	TGTAGCACGATTGCAGCATTG hits reverse strand at [1152] with 0 mismatches
+	Amplimer length: 72 bp
+
+Primer name NIID_2019-nCOV_N_JP
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	AAATTTTGGGGACCAGGAAC hits forward strand at 29125 with 0 mismatches
+	TGGCAGCTGTGTAGGTCAAC hits reverse strand at [622] with 1 mismatches
+	Amplimer length: 158 bp
+
+Primer name HKU-ORF1b-nsp14_HK
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	TGGGG[TCY]TTTAC[GAR]GGTAACCT hits forward strand at 18778 with 0 mismatches
+	AAC[GAR]CGCTTAACAAAGCACTC hits reverse strand at [10995] with 0 mismatches
+	Amplimer length: 132 bp
+
+Primer name HKU-N_HK
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	TAATCAGACAAGGAACTGATTA hits forward strand at 29145 with 0 mismatches
+	CGAAGGTGTGACTTCCATG hits reverse strand at [650] with 0 mismatches
+	Amplimer length: 110 bp
+
+Primer name WH-NIC_N_TH
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	CGTTTGGTGGACCCTCAGAT hits forward strand at 28320 with 0 mismatches
+	CCCCACTGCGTTCTCCATT hits reverse strand at [1528] with 0 mismatches
+	Amplimer length: 57 bp
+
+Primer name N_Sarbeco_DE
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	CACATTGGCACCCGCAATC hits forward strand at 28706 with 0 mismatches
+	GAGGAACGAGAAGAGGCTTG hits reverse strand at [1071] with 0 mismatches
+	Amplimer length: 128 bp
+
+Primer name nCoV_IP2_FR
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	ATGAGCTTAGTCCTGTTG hits forward strand at 12690 with 0 mismatches
+	CTCCCTTTGTTGTGTTGT hits reverse strand at [17107] with 0 mismatches
+	Amplimer length: 108 bp
+
+Primer name nCoV_IP4_FR
+Amplimer 1
+	Sequence: MN908947.3  
+	Severe acute respiratory syndrome coronavirus 2 isolate Wuhan-Hu-1, complete genome
+	GGTAACTGGTATGATTTCG hits forward strand at 14080 with 0 mismatches
+	CTGGTCAAGGTTAATATAGG hits reverse strand at [15718] with 0 mismatches
+	Amplimer length: 107 bp
+
+Primer name RP-F_US

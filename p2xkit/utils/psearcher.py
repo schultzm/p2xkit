@@ -75,9 +75,13 @@ class Psearcher:
         psearchcl.infile = self.primers
         psearchcl.mismatchpercent = self.mismatch
         psearchcl.outfile = "stdout"
+        # psearchcl.outfile = "primersearch.tmp"
         print(psearchcl, file=sys.stderr)
+        # psearchcl()
         stdout, stderr = psearchcl()
         self.pcr_results = psearch.read(StringIO(stdout))
+        # with open("primersearch.tmp", "r") as input_handle:
+            # self.pcr_results = psearch.read(input_handle)
 
 
     def amplimer_table(self):
@@ -117,12 +121,12 @@ class Psearcher:
                         # print(len(self.template_seqs[hit[0]].seq))
                         sub_df['rev_oligo_tmplt_end']   = len(self.template_seqs[hit[0]].seq) - int(rev[-4].replace('[', '').replace(']', '')) + 1
                         sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo'])
-                        sub_df['amplicon_insert'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_end']:sub_df['rev_oligo_tmplt_start']].upper())
-                        sub_df['amplicon_full'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']].upper())
-                        sub_df['amplicon_length'] = len(sub_df['amplicon_full'])
+                        # sub_df['amplicon_insert'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_end']:sub_df['rev_oligo_tmplt_start']].upper())
+                        # sub_df['amplicon_full'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']].upper())
+                        # sub_df['amplicon_length'] = len(sub_df['amplicon_full'])
                         sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']]).upper()
                         sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']]).upper()
-                        sub_df['product'] = str(sub_df['fwd_oligo']+sub_df['amplicon_insert']+Seq(sub_df['rev_oligo'], alphabet=IUPAC.ambiguous_dna).reverse_complement())
+                        # sub_df['product'] = str(sub_df['fwd_oligo']+sub_df['amplicon_insert']+Seq(sub_df['rev_oligo'], alphabet=IUPAC.ambiguous_dna).reverse_complement())
                         sub_df['fwd_match_mismatch'] = _iupac_zipper(sub_df['fwd_oligo'], sub_df['fwd_oligo_match'])
                         sub_df['rev_match_mismatch'] = _iupac_zipper(sub_df['rev_oligo'], str(Seq(sub_df['rev_oligo_match'], alphabet=IUPAC.ambiguous_dna).reverse_complement()))
                         df = pd.DataFrame(sub_df, index=[primerpair_name])
