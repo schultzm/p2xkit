@@ -24,8 +24,8 @@ def indexit(infile):
 
 
 class Bowtier:
-    def __init__(self, amplimer_table, templates, probes, reverse_complement):
-        self.templates = templates
+    def __init__(self, amplimer_table, template, probes, reverse_complement):
+        self.template = template
         self.probes = probes
         self.amplimer_table = amplimer_table
         self.reverse_complement = reverse_complement
@@ -45,10 +45,14 @@ class Bowtier:
         for rown in self.amplimer_table.index.values: #iterate through all the amplimers and map probes
         # if pd.notnull(self.amplimer_table.loc[rown, 'amplicon_insert']):
             amplimer_n = f"{self.amplimer_table.loc[rown, 'amplimer_n']}"
-            subseq = SeqRecord(Seq(self.amplimer_table.loc[rown, 'amplicon_insert'],
-                                    alphabet=IUPAC.ambiguous_dna),
-                            id=self.amplimer_table.loc[rown, 'primer_pair'],
-                            description=f"{amplimer_n} from {self.amplimer_table.loc[rown, 'template_name']}")
+            amplicon_insert = self.template_seqs[self.amplimer_table.loc[rown, 'template_name']]. \
+                                                 seq[self.amplimer_table.loc[rown, 'fwd_oligo_tmplt_end']: \
+                                                     self.amplimer_table.loc[rown, 'rev_oligo_tmplt_start']]. \
+                              upper()#next line slice it
+            # print('amplicon_insert', amplicon_insert)
+            subseq = SeqRecord(amplicon_insert,
+                              id=self.amplimer_table.loc[rown, 'primer_pair'],
+                              description=f"{amplimer_n} from {self.amplimer_table.loc[rown, 'template_name']}")
             outhandle = Path(f"{self.amplimer_table.loc[rown, 'template_name']}_primerpair{subseq.id}_{amplimer_n}.fasta")
             SeqIO.write(subseq, outhandle, 'fasta') # writes out the amplicon insert to file
             indexed = indexit(outhandle) # indexes the amplicon insert **need to clean this up at end

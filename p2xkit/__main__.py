@@ -58,10 +58,10 @@ def main():
     if not args.subparser_name:
         parser.print_help()
     elif args.subparser_name == "ispcr":
-        if args.end is None: # i.e., if args.end not set, then make it slightly longer than the longest contig
+        if args.end is None: # i.e., if args.end not set, then make it the sum of the length of all the contigs
             from Bio import SeqIO
             with open(args.template, 'r') as input_handle:
-                args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
+                args.end = sum([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))])# + 1
                 print(f"Set args.end to {args.end} as user entered 'None'",
                       file=sys.stderr)
         from .utils.psearcher import Psearcher
@@ -76,9 +76,9 @@ def main():
         print(reaction.amplimer_table().to_csv(sep="\t"))
     elif args.subparser_name == "qpcr":
         from Bio import SeqIO
-        if args.end is None: # i.e., if args.end not set, then make it slightly longer than the longest contig
+        if args.end is None: # i.e., if args.end not set, then make it the sum of the length of all the contigs
             with open(args.template, 'r') as input_handle:
-                args.end = max([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))]) + 1
+                args.end = sum([len(seq.seq) for seq in list(SeqIO.parse(input_handle, 'fasta'))])# + 1
                 # if args.end > 5000001:
                 #     print(f"Your max contig size is > 5000000.  You will probably run into out of memory errors.")
         from .utils.psearcher import Psearcher

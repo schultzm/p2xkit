@@ -123,7 +123,7 @@ class Psearcher:
                         sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo'])
                         # sub_df['amplicon_insert'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_end']:sub_df['rev_oligo_tmplt_start']].upper())
                         # sub_df['amplicon_full'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']].upper())
-                        # sub_df['amplicon_length'] = len(sub_df['amplicon_full'])
+                        sub_df['amplicon_length'] = amplimer.length
                         sub_df['fwd_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['fwd_oligo_tmplt_start']:sub_df['fwd_oligo_tmplt_end']]).upper()
                         sub_df['rev_oligo_match'] = str(self.template_seqs[sub_df['template_name']].seq[sub_df['rev_oligo_tmplt_start']:sub_df['rev_oligo_tmplt_end']]).upper()
                         # sub_df['product'] = str(sub_df['fwd_oligo']+sub_df['amplicon_insert']+Seq(sub_df['rev_oligo'], alphabet=IUPAC.ambiguous_dna).reverse_complement())
