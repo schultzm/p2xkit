@@ -24,7 +24,8 @@ def indexit(infile):
 
 
 class Bowtier:
-    def __init__(self, amplimer_table, template, probes, reverse_complement):
+    def __init__(self, amplimer_table, template, probes, reverse_complement,
+                 trickit):
         self.template = template
         self.probes = probes
         self.amplimer_table = amplimer_table
@@ -32,7 +33,7 @@ class Bowtier:
         self.template_seqs = {seq.id: seq for seq in list(SeqIO.parse(open(self.template, 'r'), 'fasta'))}
         if self.reverse_complement:
             self.template_seqs = {seq.id: seq.reverse_complement() for seq in list(SeqIO.parse(open(self.template, 'r'), 'fasta'))}
-
+        self.trickit = trickit
 
     def bowtieit(self):
         self.amplimer_table.set_index('primer_pair')
@@ -44,9 +45,16 @@ class Bowtier:
                 probes_dict[probe.id].append(probe) # Need to specify in readme that probe names must be same as primer_pair with a space and then a probe identifier (e.g., 'RdRP_SARSr_DE P2')
         for rown in self.amplimer_table.index.values: #iterate through all the amplimers and map probes
             amplimer_n = f"{self.amplimer_table.loc[rown, 'amplimer_n']}"
+            # Get the amplicon insert, i.e., the region EXCLUDING the primers.
+            template_start = self.amplimer_table.loc[rown, 'fwd_oligo_tmplt_end']
+            template_end   = self.amplimer_table.loc[rown, 'rev_oligo_tmplt_start']
+            # Get the amplicon template, i.e., the region INCLUDING the primers.
+            if self.trickit: # allow user to search for single probe locations
+                template_start = self.amplimer_table.loc[rown, 'fwd_oligo_tmplt_start']
+                template_end   = self.amplimer_table.loc[rown, 'rev_oligo_tmplt_end']
             amplicon_insert = self.template_seqs[self.amplimer_table.loc[rown, 'template_name']]. \
-                              seq[self.amplimer_table.loc[rown, 'fwd_oligo_tmplt_end']: \
-                                  self.amplimer_table.loc[rown, 'rev_oligo_tmplt_start']].upper()
+                              seq[template_start: \
+                                  template_end].upper()
             subseq = SeqRecord(amplicon_insert,
                               id=self.amplimer_table.loc[rown, 'primer_pair'],
                               description=f"{amplimer_n} from {self.amplimer_table.loc[rown, 'template_name']}")

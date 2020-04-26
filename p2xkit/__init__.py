@@ -3,7 +3,7 @@
 p2xkit init.py
 """
 
-__version__         = "0.0.10"
+__version__         = "0.1.0"
 __parent_dir__      = "p2xkit"
 __test_primers__    = "data/primers.tsv"
 __test_probes__     = "data/probes.fa"
