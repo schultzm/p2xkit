@@ -77,7 +77,11 @@ def main():
                              args.end,
                              args.upper_limit)
         reaction.psearchit()
-        print(reaction.amplimer_table().to_csv(sep="\t"))
+        amplimer_table = reaction.amplimer_table()
+        if amplimer_table is not None:
+            print(amplimer_table.to_csv(sep="\t"))
+        else:
+            print('No PCR hits found.\n', file=sys.stderr)
     elif args.subparser_name == "qpcr":
         from Bio import SeqIO
         if args.end is None: # i.e., if args.end not set, then make it the sum of the length of all the contigs

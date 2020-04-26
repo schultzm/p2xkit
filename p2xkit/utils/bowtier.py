@@ -23,7 +23,7 @@ def indexit(infile):
     return list(infile.parent.glob(f"{infile.stem}.*.bt2"))
 
 
-class Bowtier:
+class Bowtier:  #could also abandon the use of bowtie2 completely and trick the system using primersearch for the probes
     def __init__(self, amplimer_table, template, probes, reverse_complement):
         self.template = template
         self.probes = probes
