@@ -52,8 +52,8 @@ class BedTestCasePass(unittest.TestCase):
                          _collapsed_iupac("CA[GAR]ATGTTAAA[GCS]ACACTATTAGCATA"))
 
     def iupaczipper(self):
-        self.assertEqual(_iupac_zipper('CCAGGTGGWACRTCATCMGGTGATGC', 'CCAGGTGGAACCTCATCAGGAGATGC'),
-                         "'===========X========X=====")
+        self.assertEqual(_iupac_zipper('CCAGGTGGWACRTCATCMGGTGAT-C', 'CCAGGTGGAACCTCATCAGGAGATGC'),
+                         "'===========X========X===X=")
 
     def amplifiers_parsed(self):
         reaction = Psearcher(self.templates,

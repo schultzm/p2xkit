@@ -23,7 +23,7 @@ def indexit(infile):
     return list(infile.parent.glob(f"{infile.stem}.*.bt2"))
 
 
-class Bowtier:  #could also abandon the use of bowtie2 completely and trick the system using primersearch for the probes
+class Bowtier:
     def __init__(self, amplimer_table, template, probes, reverse_complement):
         self.template = template
         self.probes = probes
@@ -54,7 +54,7 @@ class Bowtier:  #could also abandon the use of bowtie2 completely and trick the 
             SeqIO.write(subseq, outhandle, 'fasta') # writes out the amplicon insert to file
             indexed = indexit(outhandle) # indexes the amplicon insert **need to clean this up at end
             for probe in probes_dict[subseq.id]: #Iterate through probes for each primer pair
-                map_cmd = f"bowtie2 -x {PurePath(outhandle.parent, outhandle.stem)} -U {probe.seq} -c --sam-no-qname-trunc --end-to-end  -L 7 -D 20"
+                map_cmd = f"bowtie2 -x {PurePath(outhandle.parent, outhandle.stem)} -U {probe.seq} -c --sam-no-qname-trunc --end-to-end --mm -L 7 -D 20"
                 proc1 = Popen(shlex.split(map_cmd), stdout=PIPE, stderr=PIPE)
                 samfile = proc1.stdout.fileno()
                 with pysam.AlignmentFile(samfile, "r") as sam:

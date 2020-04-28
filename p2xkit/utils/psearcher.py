@@ -6,6 +6,7 @@ from Bio.Alphabet import IUPAC
 from Bio.Align import MultipleSeqAlignment as MSA
 import pandas as pd
 from Bio.Data.IUPACData import ambiguous_dna_values
+ambiguous_dna_values['-'] = 'N' # because sometimes sequences have '-' in them. 
 from io import StringIO
 import sys
 import Bio
@@ -110,7 +111,6 @@ class Psearcher:
                         sub_df['rev_mismatches'] = int(rev[-2])
                         sub_df['fwd_oligo_tmplt_start'] = int(fwd[-4]) - 1
                         sub_df['fwd_oligo_tmplt_end']   = sub_df['fwd_oligo_tmplt_start'] + len(sub_df['fwd_oligo'])
-                        # print(hit[0])
                         sub_df['rev_oligo_tmplt_end']   = len(self.template_seqs[hit[0]].seq) - int(rev[-4].replace('[', '').replace(']', '')) + 1
                         sub_df['rev_oligo_tmplt_start'] = sub_df['rev_oligo_tmplt_end'] - len(sub_df['rev_oligo'])
                         sub_df['amplicon_length'] = amplimer.length
