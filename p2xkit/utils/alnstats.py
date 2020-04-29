@@ -7,8 +7,13 @@ RdRP_SARSr_DE	===========X========X====	MT123291	SARS2
 RdRP_SARSr_DE	===========X=============	MT123292	SARS1"""
 
 import pandas as pd
-from io import StringIO
-df = pd.read_csv(StringIO(databin), sep="\t", header=0)
+import sys
+df = None
+if sys.argv[1] == 'test':
+    from io import StringIO
+    df = pd.read_csv(StringIO(databin), sep="\t", header=0)
+else:
+    df = pd.read_csv(sys.argv[1], sep="\t", header=0)
 df['matchmismatch'] = df[['matchmismatch']].apply(lambda x: f"{x.values[0].replace('=', '0').replace('X', '1')}", axis=1)
 headerpre = 'pos'
 df = pd.concat([df, df['matchmismatch'].str.split('', expand=True).rename(columns = lambda x: f"{headerpre}"+str(x+1))], axis=1)
