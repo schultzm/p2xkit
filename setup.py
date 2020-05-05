@@ -36,7 +36,7 @@ setup(
         "dev": ["pre-commit", "pipenv"],
         "test": ["pytest", "pytest-cov"],
     },
-    package_data={"": [""]},  # Optional
+    package_data={"p2xkit": ["data/*.tsv", "data/*.fa"]},  # Optional
     entry_points={"console_scripts": ["p2xkit = p2xkit.__main__:main"]}  # Optional
 
     )
